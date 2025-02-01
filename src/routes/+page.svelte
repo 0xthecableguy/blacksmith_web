@@ -13,7 +13,7 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
-        font-family: 'Advent Pro', sans-serif;
+        font-family: 'Questrial', sans-serif;
     }
 
 		.page-container {
@@ -26,6 +26,6 @@
         background-position: center;
         background-repeat: no-repeat;
         align-items: center;
-        background-image: url("/background.jpg");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/background.jpg");
     }
 </style>
