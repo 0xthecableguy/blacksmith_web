@@ -1,0 +1,40 @@
+# Node.js modules
+node_modules/
+
+# SvelteKit output
+.svelte-kit/
+.build/
+dist/
+
+# Vercel, Netlify, Wrangler
+.output/
+.vercel/
+.netlify/
+.wrangler/
+
+# OS system files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# JetBrains/WebStorm
+.idea/
+
+# Editor files (VSCode, Sublime, etc.)
+.vscode/
+*.sublime-workspace
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
