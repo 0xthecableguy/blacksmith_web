@@ -1,36 +1,42 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
+	import { sendMessageToServer } from '$lib/api';
+	import type { BlacksmithServerResponse } from '$lib/types';
 	import { tick } from 'svelte';
 	import "./ChatUI.svelte.css";
+	import DOMPurify from 'dompurify';
 
 	const messages = writable<{ text: string; sender: 'user' | 'server' }[]>([]);
 	let userMessage = '';
 	let messagesContainer: HTMLDivElement;
 
-	function sendMessage() {
+	async function sendMessage() {
 		if (!userMessage.trim()) return;
 
 		messages.update((msgs) => [...msgs, { text: userMessage, sender: 'user' }]);
-		scrollToBottom();
+		await scrollToBottom();
 
-		messages.update((msgs) => [
-			...msgs,
-			{
-				text: "Hello! This is a test answer from server to check if all CSS is correct.",
-				sender: 'server'
-			}
-		]);
-		scrollToBottom();
-
+		const userText = userMessage;
 		userMessage = '';
+
+		try {
+			const response: BlacksmithServerResponse = await sendMessageToServer({
+				text: userText,
+				user_id: 12345,
+				app_name: "W3AWeb"
+			});
+
+			messages.update((msgs) => [...msgs, { text: response.text, sender: 'server' }]);
+			await scrollToBottom();
+		} catch (error) {
+			console.error('Ошибка отправки сообщения:', error);
+		}
 	}
 
 	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text).then(() => {
-			console.log("Скопировано:", text);
-		}).catch(err => {
-			console.error("Ошибка копирования:", err);
-		});
+		navigator.clipboard.writeText(text)
+			.then(() => console.log("Скопировано:", text))
+			.catch(err => console.error("Ошибка копирования:", err));
 	}
 
 	function speakMessage(text: string) {
@@ -43,10 +49,14 @@
 			messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: "smooth" });
 		}
 	}
+
+	function sanitize(html: string) {
+		return DOMPurify.sanitize(html);
+	}
 </script>
 
 <div class="chat-box">
-	<img src="/logo_black.png" alt="Chat Logo" class="chat-logo" />
+	<img src="/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	<h2>This is a place for slogan or another call-to-action text!</h2>
 
 	<div class="messages-container" bind:this={messagesContainer}>
@@ -54,7 +64,8 @@
 			<div class="message-wrapper {message.sender === 'user' ? 'user-message' : 'server-message'}">
 				<div class="message-container">
 					<div class="message">
-						<p>{message.text}</p>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						<p>{@html sanitize(message.text)}</p>
 					</div>
 
 					{#if message.sender === 'server'}
