@@ -1,14 +1,33 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { sendMessageToServer } from '$lib/api';
+	import { onMount } from 'svelte';
+	import { sendMessageToServer, fetchChatHistory } from '$lib/api';
 	import type { BlacksmithServerResponse } from '$lib/types';
 	import { tick } from 'svelte';
 	import "./ChatUI.svelte.css";
-	import DOMPurify from 'dompurify';
+	import { copyToClipboard, speakMessage, sanitize, getUserId } from '$lib/utils';
+
 
 	const messages = writable<{ text: string; sender: 'user' | 'server' }[]>([]);
 	let userMessage = '';
 	let messagesContainer: HTMLDivElement;
+	let userId: string;
+	let app_name = "w3a_web";
+
+	onMount(async () => {
+		userId = getUserId();
+		console.log("User ID:", userId);
+
+		try {
+			const chatHistory = await fetchChatHistory(userId, app_name);
+			messages.set(chatHistory.map(msg => ({
+				text: msg.message,
+				sender: msg.sender as 'user' | 'server'
+			})));
+		} catch (error) {
+			console.error("Error processing chat history fetching request:", error);
+		}
+	});
 
 	async function sendMessage() {
 		if (!userMessage.trim()) return;
@@ -22,25 +41,15 @@
 		try {
 			const response: BlacksmithServerResponse = await sendMessageToServer({
 				text: userText,
-				user_id: 12345,
-				app_name: "W3AWeb"
+				user_id: userId,
+				app_name: "w3a_web"
 			});
 
 			messages.update((msgs) => [...msgs, { text: response.text, sender: 'server' }]);
 			await scrollToBottom();
 		} catch (error) {
-			console.error('Ошибка отправки сообщения:', error);
+			console.error('Error sending request to server:', error);
 		}
-	}
-
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text)
-			.then(() => console.log("Скопировано:", text))
-			.catch(err => console.error("Ошибка копирования:", err));
-	}
-
-	function speakMessage(text: string) {
-		console.log("Озвучивание текста:", text);
 	}
 
 	async function scrollToBottom() {
@@ -48,10 +57,6 @@
 		if (messagesContainer) {
 			messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: "smooth" });
 		}
-	}
-
-	function sanitize(html: string) {
-		return DOMPurify.sanitize(html);
 	}
 </script>
 
