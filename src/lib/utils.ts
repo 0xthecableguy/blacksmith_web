@@ -37,3 +37,8 @@ function getCookie(name: string): string | null {
 	const match = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return match ? match[2] : null;
 }
+
+export function acceptCookies(): boolean {
+	localStorage.setItem("cookie_consent", "true");
+	return false;
+}

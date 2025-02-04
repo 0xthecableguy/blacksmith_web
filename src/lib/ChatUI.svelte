@@ -5,7 +5,7 @@
 	import type { BlacksmithServerResponse } from '$lib/types';
 	import { tick } from 'svelte';
 	import "./ChatUI.svelte.css";
-	import { copyToClipboard, speakMessage, sanitize, getUserId } from '$lib/utils';
+	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils';
 
 
 	const messages = writable<{ text: string; sender: 'user' | 'server' }[]>([]);
@@ -13,10 +13,16 @@
 	let messagesContainer: HTMLDivElement;
 	let userId: string;
 	let app_name = "w3a_web";
+	let showCookieNotice = true;
 
 	onMount(async () => {
 		userId = getUserId();
 		console.log("User ID:", userId);
+
+		const cookieConsent = localStorage.getItem("cookie_consent");
+		if (cookieConsent === "true") {
+			showCookieNotice = false;
+		}
 
 		try {
 			const chatHistory = await fetchChatHistory(userId, app_name);
@@ -24,10 +30,16 @@
 				text: msg.message,
 				sender: msg.sender as 'user' | 'server'
 			})));
+
+			await scrollToBottom();
 		} catch (error) {
 			console.error("Error processing chat history fetching request:", error);
 		}
 	});
+
+	function handleAcceptCookies() {
+		showCookieNotice = acceptCookies();
+	}
 
 	async function sendMessage() {
 		if (!userMessage.trim()) return;
@@ -106,3 +118,13 @@
 		<button on:click={sendMessage} class="send-btn">Send</button>
 	</div>
 </div>
+
+{#if showCookieNotice}
+	<div class="cookie-notice">
+		<p>
+			Мы используем файлы cookie для улучшения работы приложения<br />
+			Продолжая использование, вы соглашаетесь с нашей политикой cookie
+		</p>
+		<button on:click={handleAcceptCookies}>Ok</button>
+	</div>
+{/if}
