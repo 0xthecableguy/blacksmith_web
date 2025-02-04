@@ -1,7 +1,7 @@
-import type { BlacksmithWebUserAction, BlacksmithServerResponse } from '$lib/types';
+import type { BlacksmithWebUserAction, BlacksmithServerResponse, ChatMessage } from '$lib/types';
 
 export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Promise<BlacksmithServerResponse> => {
-	console.log('Отправка запроса на сервер:', payload);
+	console.log('Sending request to server:', payload);
 
 	const modifiedPayload = {
 		...payload,
@@ -17,13 +17,43 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Pro
 	});
 
 	if (!response.ok) {
-		const errorText = await response.text();
-		console.error(`Ошибка запроса (${response.status}):`, errorText);
+		let errorText;
+		try {
+			errorText = await response.json();
+		} catch {
+			errorText = await response.text();
+		}
 
-		throw new Error(`Ошибка запроса: ${response.status}`);
+		console.error(`Error processing request (${response.status}):`, errorText);
+		throw new Error(`Error processing request: ${response.status} - ${JSON.stringify(errorText)}`);
 	}
 
 	const data: BlacksmithServerResponse = await response.json();
 	console.log("Server response data:", data);
+	return data;
+};
+
+export const fetchChatHistory = async (userId: string, app_name: string): Promise<ChatMessage[]> => {
+	console.log('Fetching chat history for user:', userId);
+
+	const response = await fetch(`https://v3.spb.ru/blacksmith_web_chat_fetch?user_id=${userId}&app_name=${app_name}`, {
+		method: 'GET',
+		headers: { 'Content-Type': 'application/json' },
+	});
+
+	if (!response.ok) {
+		let errorText;
+		try {
+			errorText = await response.json();
+		} catch {
+			errorText = await response.text();
+		}
+
+		console.error(`Error fetching chat history (${response.status}):`, errorText);
+		throw new Error(`Error fetching chat history: ${response.status} - ${JSON.stringify(errorText)}`);
+	}
+
+	const data: ChatMessage[] = await response.json();
+	console.log("Loaded chat history for user:", userId, ":", data);
 	return data;
 };

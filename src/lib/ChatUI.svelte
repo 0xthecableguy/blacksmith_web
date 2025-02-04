@@ -1,14 +1,45 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { sendMessageToServer } from '$lib/api';
+	import { onMount } from 'svelte';
+	import { sendMessageToServer, fetchChatHistory } from '$lib/api';
 	import type { BlacksmithServerResponse } from '$lib/types';
 	import { tick } from 'svelte';
 	import "./ChatUI.svelte.css";
-	import DOMPurify from 'dompurify';
+	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils';
+
 
 	const messages = writable<{ text: string; sender: 'user' | 'server' }[]>([]);
 	let userMessage = '';
 	let messagesContainer: HTMLDivElement;
+	let userId: string;
+	let app_name = "w3a_web";
+	let showCookieNotice = true;
+
+	onMount(async () => {
+		userId = getUserId();
+		console.log("User ID:", userId);
+
+		const cookieConsent = localStorage.getItem("cookie_consent");
+		if (cookieConsent === "true") {
+			showCookieNotice = false;
+		}
+
+		try {
+			const chatHistory = await fetchChatHistory(userId, app_name);
+			messages.set(chatHistory.map(msg => ({
+				text: msg.message,
+				sender: msg.sender as 'user' | 'server'
+			})));
+
+			await scrollToBottom();
+		} catch (error) {
+			console.error("Error processing chat history fetching request:", error);
+		}
+	});
+
+	function handleAcceptCookies() {
+		showCookieNotice = acceptCookies();
+	}
 
 	async function sendMessage() {
 		if (!userMessage.trim()) return;
@@ -19,28 +50,70 @@
 		const userText = userMessage;
 		userMessage = '';
 
+		let isAnimating = true;
+		let dots = 1;
+
+		const tempId = Date.now();
+		const tempMessage = { id: tempId, text: "печатает .", sender: 'server' as const };
+
+		messages.update((msgs) => [...msgs, tempMessage]);
+		await scrollToBottom();
+
+		const updateDots = () => {
+			if (!isAnimating) return;
+			dots = (dots % 3) + 1;
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					msgs[index] = { ...tempMessage, text: "печатает " + ".".repeat(dots) };
+				}
+				return msgs;
+			});
+		};
+
+		const interval = setInterval(updateDots, 500);
+
 		try {
 			const response: BlacksmithServerResponse = await sendMessageToServer({
 				text: userText,
-				user_id: 12345,
-				app_name: "W3AWeb"
+				user_id: userId,
+				app_name: "w3a_web"
 			});
 
-			messages.update((msgs) => [...msgs, { text: response.text, sender: 'server' }]);
+			isAnimating = false;
+			clearInterval(interval);
+
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					return [
+						...msgs.slice(0, index),
+						{ text: response.text, sender: 'server' as const },
+						...msgs.slice(index + 1)
+					];
+				}
+				console.log("Temp 'typing' system message not found");
+				return msgs;
+			});
+
 			await scrollToBottom();
 		} catch (error) {
-			console.error('Ошибка отправки сообщения:', error);
+			isAnimating = false;
+			clearInterval(interval);
+			console.error('Error sending request to server:', error);
+
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					return [
+						...msgs.slice(0, index),
+						{ text: "Произошла ошибка при отправке сообщения. Повторите попытку позже", sender: 'server' as const },
+						...msgs.slice(index + 1)
+					];
+				}
+				return msgs;
+			});
 		}
-	}
-
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text)
-			.then(() => console.log("Скопировано:", text))
-			.catch(err => console.error("Ошибка копирования:", err));
-	}
-
-	function speakMessage(text: string) {
-		console.log("Озвучивание текста:", text);
 	}
 
 	async function scrollToBottom() {
@@ -48,10 +121,6 @@
 		if (messagesContainer) {
 			messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: "smooth" });
 		}
-	}
-
-	function sanitize(html: string) {
-		return DOMPurify.sanitize(html);
 	}
 </script>
 
@@ -101,3 +170,13 @@
 		<button on:click={sendMessage} class="send-btn">Send</button>
 	</div>
 </div>
+
+{#if showCookieNotice}
+	<div class="cookie-notice">
+		<p>
+			Мы используем файлы cookie для улучшения работы приложения<br />
+			Продолжая использование, вы соглашаетесь с нашей политикой cookie
+		</p>
+		<button on:click={handleAcceptCookies}>Ok</button>
+	</div>
+{/if}
