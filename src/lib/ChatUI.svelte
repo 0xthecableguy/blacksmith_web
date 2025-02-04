@@ -50,6 +50,29 @@
 		const userText = userMessage;
 		userMessage = '';
 
+		let isAnimating = true;
+		let dots = 1;
+
+		const tempId = Date.now();
+		const tempMessage = { id: tempId, text: "печатает .", sender: 'server' as const };
+
+		messages.update((msgs) => [...msgs, tempMessage]);
+		await scrollToBottom();
+
+		const updateDots = () => {
+			if (!isAnimating) return;
+			dots = (dots % 3) + 1;
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					msgs[index] = { ...tempMessage, text: "печатает " + ".".repeat(dots) };
+				}
+				return msgs;
+			});
+		};
+
+		const interval = setInterval(updateDots, 500);
+
 		try {
 			const response: BlacksmithServerResponse = await sendMessageToServer({
 				text: userText,
@@ -57,10 +80,39 @@
 				app_name: "w3a_web"
 			});
 
-			messages.update((msgs) => [...msgs, { text: response.text, sender: 'server' }]);
+			isAnimating = false;
+			clearInterval(interval);
+
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					return [
+						...msgs.slice(0, index),
+						{ text: response.text, sender: 'server' as const },
+						...msgs.slice(index + 1)
+					];
+				}
+				console.log("Temp 'typing' system message not found");
+				return msgs;
+			});
+
 			await scrollToBottom();
 		} catch (error) {
+			isAnimating = false;
+			clearInterval(interval);
 			console.error('Error sending request to server:', error);
+
+			messages.update((msgs) => {
+				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
+				if (index !== -1) {
+					return [
+						...msgs.slice(0, index),
+						{ text: "Произошла ошибка при отправке сообщения. Повторите попытку позже", sender: 'server' as const },
+						...msgs.slice(index + 1)
+					];
+				}
+				return msgs;
+			});
 		}
 	}
 
