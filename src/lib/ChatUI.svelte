@@ -66,7 +66,7 @@
 		}
 	}
 
-	async function scrollToBottom() {
+	export async function scrollToBottom() {
 		await tick();
 		if (messagesContainer) {
 			messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: "smooth" });
@@ -98,7 +98,7 @@
 							</button>
 
 
-							<button class="speak-btn" on:click={() => speakMessage(message.text)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
+							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
 								<img src="/speak-icon.png" alt="Speak"/>
 							</button>
 						</div>

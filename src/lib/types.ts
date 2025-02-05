@@ -4,6 +4,16 @@ export interface BlacksmithWebUserAction {
 	app_name: string;
 }
 
+export interface TextToSpeechRequest {
+	text: string;
+	user_id: string;
+	app_name: string;
+}
+
+export interface TextToSpeechResponse {
+	audio_data: string;
+}
+
 export interface BlacksmithServerResponse {
 	text: string;
 }

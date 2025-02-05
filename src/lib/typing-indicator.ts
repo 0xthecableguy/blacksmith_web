@@ -1,9 +1,11 @@
 import type { Writable } from 'svelte/store';
 
-interface Message {
+export interface Message {
 	id?: number;
 	text: string;
 	sender: 'user' | 'server';
+	audioData?: string;
+	format?: string;
 }
 
 interface TypingIndicatorConfig {
@@ -78,5 +80,9 @@ export class TypingIndicator {
 			}
 			return msgs;
 		});
+	}
+
+	getTempMessageId(): number {
+		return this.tempMessageId;
 	}
 }
