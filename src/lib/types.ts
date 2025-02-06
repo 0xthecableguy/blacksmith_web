@@ -25,3 +25,22 @@ export interface ChatMessage {
 	message: string;
 	app_name: string;
 }
+
+export type MessageSender = 'user' | 'server';
+
+export interface BaseMessage {
+	id?: number;
+	text: string;
+	sender: MessageSender;
+}
+
+export interface TextMessage extends BaseMessage {
+	type: 'text';
+}
+
+export interface AudioMessage extends BaseMessage {
+	type: 'audio';
+	audioUrl: string;
+}
+
+export type Message = TextMessage | AudioMessage;

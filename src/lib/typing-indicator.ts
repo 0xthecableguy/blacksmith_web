@@ -1,12 +1,5 @@
 import type { Writable } from 'svelte/store';
-
-export interface Message {
-	id?: number;
-	text: string;
-	sender: 'user' | 'server';
-	audioData?: string;
-	format?: string;
-}
+import type { Message } from './types';
 
 interface TypingIndicatorConfig {
 	messages: Writable<Message[]>;
@@ -25,7 +18,7 @@ export class TypingIndicator {
 	constructor({
 								messages,
 								dotsUpdateInterval = 500,
-								baseText = "печатает"
+								baseText = "⌨️ печатает ответ"
 							}: TypingIndicatorConfig) {
 		this.messages = messages;
 		this.tempMessageId = Date.now();
@@ -42,7 +35,8 @@ export class TypingIndicator {
 			{
 				id: this.tempMessageId,
 				text: `${this.baseText} .`,
-				sender: 'server'
+				sender: 'server',
+				type: 'text'
 			}
 		]);
 
@@ -55,7 +49,8 @@ export class TypingIndicator {
 					msgs[index] = {
 						id: this.tempMessageId,
 						text: `${this.baseText} ${'.'.repeat(dots)}`,
-						sender: 'server'
+						sender: 'server',
+						type: 'text'
 					};
 				}
 				return msgs;
@@ -74,7 +69,11 @@ export class TypingIndicator {
 			if (index !== -1) {
 				return [
 					...msgs.slice(0, index),
-					{ text: replacementMessage, sender: 'server' },
+					{
+						text: replacementMessage,
+						sender: 'server',
+						type: 'text'
+					},
 					...msgs.slice(index + 1)
 				];
 			}
