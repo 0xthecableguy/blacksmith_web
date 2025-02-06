@@ -1,4 +1,10 @@
-import type { BlacksmithWebUserAction, BlacksmithServerResponse, ChatMessage } from '$lib/types';
+import type {
+	BlacksmithWebUserAction,
+	BlacksmithServerResponse,
+	ChatMessage,
+	TextToSpeechRequest,
+	TextToSpeechResponse
+} from '$lib/types';
 
 export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Promise<BlacksmithServerResponse> => {
 	console.log('Sending request to server:', payload);
@@ -30,6 +36,34 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Pro
 
 	const data: BlacksmithServerResponse = await response.json();
 	console.log("Server response data:", data);
+	return data;
+};
+
+export const sendTextToSpeech = async (payload: TextToSpeechRequest): Promise<TextToSpeechResponse> => {
+	console.log('Sending TTS request:', payload);
+
+	const response = await fetch('https://v3.spb.ru/blacksmith_web_tts_input', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(payload),
+	});
+
+	if (!response.ok) {
+		let errorText;
+		try {
+			errorText = await response.json();
+		} catch {
+			errorText = await response.text();
+		}
+
+		console.error(`TTS Error (${response.status}):`, errorText);
+		throw new Error(`TTS Error: ${response.status} - ${JSON.stringify(errorText)}`);
+	}
+
+	const data: TextToSpeechResponse = await response.json();
+	console.log("TTS response received");
 	return data;
 };
 

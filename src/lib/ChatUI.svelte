@@ -2,18 +2,24 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { sendMessageToServer, fetchChatHistory } from '$lib/api';
-	import type { BlacksmithServerResponse } from '$lib/types';
+	import type { BlacksmithServerResponse, MessageSender } from '$lib/types';
 	import { tick } from 'svelte';
 	import "./ChatUI.svelte.css";
 	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils';
+	import { TypingIndicator } from '$lib/typing-indicator';
+	import WaveSurfer from 'wavesurfer.js';
+	import type { Message } from '$lib/types';
 
 
-	const messages = writable<{ text: string; sender: 'user' | 'server' }[]>([]);
+	const messages = writable<Message[]>([]);
 	let userMessage = '';
 	let messagesContainer: HTMLDivElement;
 	let userId: string;
 	let app_name = "w3a_web";
 	let showCookieNotice = true;
+	let wavesurfers: WaveSurfer[] = [];
+
+	let micNotice = false;
 
 	onMount(async () => {
 		userId = getUserId();
@@ -28,7 +34,8 @@
 			const chatHistory = await fetchChatHistory(userId, app_name);
 			messages.set(chatHistory.map(msg => ({
 				text: msg.message,
-				sender: msg.sender as 'user' | 'server'
+				sender: msg.sender as MessageSender,
+				type: 'text'
 			})));
 
 			await scrollToBottom();
@@ -37,41 +44,22 @@
 		}
 	});
 
-	function handleAcceptCookies() {
-		showCookieNotice = acceptCookies();
-	}
-
 	async function sendMessage() {
 		if (!userMessage.trim()) return;
 
-		messages.update((msgs) => [...msgs, { text: userMessage, sender: 'user' }]);
+		messages.update((msgs) => [...msgs, {
+			text: userMessage,
+			sender: 'user',
+			type: 'text'
+		}]);
 		await scrollToBottom();
 
 		const userText = userMessage;
 		userMessage = '';
 
-		let isAnimating = true;
-		let dots = 1;
-
-		const tempId = Date.now();
-		const tempMessage = { id: tempId, text: "печатает .", sender: 'server' as const };
-
-		messages.update((msgs) => [...msgs, tempMessage]);
+		const typingIndicator = new TypingIndicator({ messages });
+		typingIndicator.start();
 		await scrollToBottom();
-
-		const updateDots = () => {
-			if (!isAnimating) return;
-			dots = (dots % 3) + 1;
-			messages.update((msgs) => {
-				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
-				if (index !== -1) {
-					msgs[index] = { ...tempMessage, text: "печатает " + ".".repeat(dots) };
-				}
-				return msgs;
-			});
-		};
-
-		const interval = setInterval(updateDots, 500);
 
 		try {
 			const response: BlacksmithServerResponse = await sendMessageToServer({
@@ -80,71 +68,91 @@
 				app_name: "w3a_web"
 			});
 
-			isAnimating = false;
-			clearInterval(interval);
-
-			messages.update((msgs) => {
-				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
-				if (index !== -1) {
-					return [
-						...msgs.slice(0, index),
-						{ text: response.text, sender: 'server' as const },
-						...msgs.slice(index + 1)
-					];
-				}
-				console.log("Temp 'typing' system message not found");
-				return msgs;
-			});
-
+			typingIndicator.stop(response.text);
 			await scrollToBottom();
 		} catch (error) {
-			isAnimating = false;
-			clearInterval(interval);
 			console.error('Error sending request to server:', error);
-
-			messages.update((msgs) => {
-				const index = msgs.findIndex(m => 'id' in m && m.id === tempId);
-				if (index !== -1) {
-					return [
-						...msgs.slice(0, index),
-						{ text: "Произошла ошибка при отправке сообщения. Повторите попытку позже", sender: 'server' as const },
-						...msgs.slice(index + 1)
-					];
-				}
-				return msgs;
-			});
+			typingIndicator.stop("Произошла ошибка при отправке сообщения");
 		}
 	}
 
-	async function scrollToBottom() {
+	export async function scrollToBottom() {
 		await tick();
 		if (messagesContainer) {
 			messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: "smooth" });
 		}
 	}
+
+	function handleAcceptCookies() {
+		showCookieNotice = acceptCookies();
+	}
+
+	function initAudioPlayer(container: HTMLDivElement, audioUrl: string) {
+		if (!audioUrl) return;
+
+		const wavesurfer = WaveSurfer.create({
+			container,
+			height: 48,
+			waveColor: 'rgba(62, 73, 101, 0.4)',
+			progressColor: 'rgba(62, 73, 101, 0.8)',
+			cursorColor: 'rgba(62, 73, 101, 0.8)',
+			barWidth: 2,
+			barGap: 1,
+			barRadius: 3,
+			normalize: true,
+			fillParent: true,
+			autoplay: false,
+			interact: true,
+			dragToSeek: true,
+			mediaControls: true
+		});
+
+		wavesurfer.load(audioUrl);
+		wavesurfers.push(wavesurfer);
+
+		return wavesurfer;
+	}
+
+	function showMicNotice() {
+		micNotice = true;
+		setTimeout(() => micNotice = false, 2000);
+	}
 </script>
 
 <div class="chat-box">
-	<img src="/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
-	<h2>This is a place for slogan or another call-to-action text!</h2>
+	<div class="header-banner-container">
+		<h2>This is a place for slogan<br />or another call-to-action text!</h2>
+		<img src="/logo_black.png" alt="Chat Logo" class="chat-logo" />
+	</div>
+
 
 	<div class="messages-container" bind:this={messagesContainer}>
 		{#each $messages as message}
 			<div class="message-wrapper {message.sender === 'user' ? 'user-message' : 'server-message'}">
 				<div class="message-container">
 					<div class="message">
-						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-						<p>{@html sanitize(message.text)}</p>
+						{#if message.type === 'text'}
+							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+							<p>{@html sanitize(message.text)}</p>
+						{:else if message.type === 'audio'}
+							<div class="audio-message">
+								<div
+									class="wavesurfer-container"
+									use:initAudioPlayer={message.audioUrl}
+								>
+									<div class="wave"></div>
+								</div>
+							</div>
+						{/if}
 					</div>
 
-					{#if message.sender === 'server'}
+					{#if message.sender === 'server' && message.type === 'text'}
 						<div class="message-actions">
 							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Копировать сообщение" title="Копировать сообщение">
 								<img src="/copy-icon-white.png" alt="Copy"/>
 							</button>
 
-
-							<button class="speak-btn" on:click={() => speakMessage(message.text)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
+							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
 								<img src="/speak-icon.png" alt="Speak"/>
 							</button>
 						</div>
@@ -155,7 +163,7 @@
 	</div>
 
 	<div class="bottom-row">
-		<button class="mic-btn">
+		<button class="mic-btn" on:click={showMicNotice}>
 			<img src="/mic.png" alt="voice message"/>
 		</button>
 
@@ -169,6 +177,14 @@
 
 		<button on:click={sendMessage} class="send-btn">Send</button>
 	</div>
+
+	{#if micNotice}
+		<div class="mic-notice">
+			<p>
+				🎤<br />Терпение, мой друг<br />Эта функция будет доступна<br />чуть позже
+			</p>
+		</div>
+	{/if}
 </div>
 
 {#if showCookieNotice}
