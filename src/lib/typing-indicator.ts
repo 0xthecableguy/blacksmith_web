@@ -18,7 +18,7 @@ export class TypingIndicator {
 	constructor({
 								messages,
 								dotsUpdateInterval = 500,
-								baseText = "⌨️ печатает ответ"
+								baseText = "⌨️\u0020печатает ответ"
 							}: TypingIndicatorConfig) {
 		this.messages = messages;
 		this.tempMessageId = Date.now();

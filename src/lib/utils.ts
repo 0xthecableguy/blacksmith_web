@@ -19,7 +19,7 @@ export async function speakMessage(
 ) {
 	const typingIndicator = new TypingIndicator({
 		messages,
-		baseText: "🔊 записывает аудио-сообщение"
+		baseText: "🔊\u0020записывает аудио-сообщение"
 	});
 
 	typingIndicator.start();
