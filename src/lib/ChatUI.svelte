@@ -122,6 +122,9 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
+		<div class="beta-badge">
+			<img src="{base}/beta_version_banner.png" alt="Beta Version" />
+		</div>
 		<h2>YOUR PATH TO<br />STABLE DEFI INCOME</h2>
 		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	</div>

@@ -322,3 +322,15 @@ h2 {
     gap: 16px;
 }
 
+.beta-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.beta-badge img {
+    height: 80px;
+    width: auto;
+}
+
