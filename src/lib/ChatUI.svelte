@@ -9,6 +9,7 @@
 	import { TypingIndicator } from '$lib/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
 	import type { Message } from '$lib/types';
+	import { base } from '$app/paths';
 
 
 	const messages = writable<Message[]>([]);
@@ -122,7 +123,7 @@
 <div class="chat-box">
 	<div class="header-banner-container">
 		<h2>This is a place for slogan<br />or another call-to-action text!</h2>
-		<img src="/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
+		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	</div>
 
 
