@@ -3,5 +3,5 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-	base: '/blacksmith_web/'
+	base: '/blacksmith_web'
 });
