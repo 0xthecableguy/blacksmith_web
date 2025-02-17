@@ -5,7 +5,8 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 const config = {
 	kit: {
 		adapter: adapter({
-			strict: true
+			strict: true,
+			fallback: null
 		}),
 		paths: {
 			base: '/blacksmith_web'
