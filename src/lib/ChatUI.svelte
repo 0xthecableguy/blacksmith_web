@@ -115,14 +115,14 @@
 
 	function showMicNotice() {
 		micNotice = true;
-		setTimeout(() => micNotice = false, 2000);
+		setTimeout(() => micNotice = false, 3000);
 	}
 </script>
 
 <div class="chat-box">
 	<div class="header-banner-container">
 		<h2>This is a place for slogan<br />or another call-to-action text!</h2>
-		<img src="/logo_black.png" alt="Chat Logo" class="chat-logo" />
+		<img src="/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	</div>
 
 
@@ -176,6 +176,10 @@
 		/>
 
 		<button on:click={sendMessage} class="send-btn">Send</button>
+	</div>
+
+	<div class="basement">
+		<img src="/logo_black.png" alt="Chat Logo" class="basement-logo" />
 	</div>
 
 	{#if micNotice}
