@@ -1,4 +1,4 @@
-export interface BlacksmithWebUserAction {
+export interface BlacksmithWebUserRequest {
 	text: string;
 	user_id: string;
 	app_name: string;

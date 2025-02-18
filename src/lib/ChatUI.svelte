@@ -9,6 +9,7 @@
 	import { TypingIndicator } from '$lib/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
 	import type { Message } from '$lib/types';
+	import { base } from '$app/paths';
 
 
 	const messages = writable<Message[]>([]);
@@ -115,14 +116,17 @@
 
 	function showMicNotice() {
 		micNotice = true;
-		setTimeout(() => micNotice = false, 2000);
+		setTimeout(() => micNotice = false, 3000);
 	}
 </script>
 
 <div class="chat-box">
 	<div class="header-banner-container">
-		<h2>This is a place for slogan<br />or another call-to-action text!</h2>
-		<img src="/logo_black.png" alt="Chat Logo" class="chat-logo" />
+		<div class="beta-badge">
+			<img src="{base}/beta_version_banner.png" alt="Beta Version" />
+		</div>
+		<h2>YOUR PATH TO<br />STABLE DEFI INCOME</h2>
+		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	</div>
 
 
@@ -149,11 +153,11 @@
 					{#if message.sender === 'server' && message.type === 'text'}
 						<div class="message-actions">
 							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Копировать сообщение" title="Копировать сообщение">
-								<img src="/copy-icon-white.png" alt="Copy"/>
+								<img src="{base}/copy-icon-white.png" alt="Copy"/>
 							</button>
 
 							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
-								<img src="/speak-icon.png" alt="Speak"/>
+								<img src="{base}/speak-icon.png" alt="Speak"/>
 							</button>
 						</div>
 					{/if}
@@ -164,7 +168,7 @@
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
-			<img src="/mic.png" alt="voice message"/>
+			<img src="{base}/mic.png" alt="voice message"/>
 		</button>
 
 		<input
@@ -176,6 +180,10 @@
 		/>
 
 		<button on:click={sendMessage} class="send-btn">Send</button>
+	</div>
+
+	<div class="basement">
+		<img src="{base}/logo_black.png" alt="Chat Logo" class="basement-logo" />
 	</div>
 
 	{#if micNotice}

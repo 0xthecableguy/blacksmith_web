@@ -1,12 +1,12 @@
 import type {
-	BlacksmithWebUserAction,
+	BlacksmithWebUserRequest,
 	BlacksmithServerResponse,
 	ChatMessage,
 	TextToSpeechRequest,
 	TextToSpeechResponse
 } from '$lib/types';
 
-export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Promise<BlacksmithServerResponse> => {
+export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Promise<BlacksmithServerResponse> => {
 	console.log('Sending request to server:', payload);
 
 	const modifiedPayload = {
@@ -14,7 +14,7 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Pro
 		user_id: payload.user_id
 	};
 
-	const response = await fetch('https://v3.spb.ru/blacksmith_web_user_action', {
+	const response = await fetch('https://v3.spb.ru/blacksmith_web_user_request', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserAction): Pro
 export const sendTextToSpeech = async (payload: TextToSpeechRequest): Promise<TextToSpeechResponse> => {
 	console.log('Sending TTS request:', payload);
 
-	const response = await fetch('https://v3.spb.ru/blacksmith_web_tts_input', {
+	const response = await fetch('https://v3.spb.ru/blacksmith_web_tts_request', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
