@@ -4,7 +4,7 @@
 	import { sendMessageToServer, fetchChatHistory } from '$lib/api';
 	import type { BlacksmithServerResponse, MessageSender } from '$lib/types';
 	import { tick } from 'svelte';
-	import "./ChatUI.svelte.css";
+	import "./ChatUI.W3A.svelte.css";
 	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils';
 	import { TypingIndicator } from '$lib/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
@@ -125,8 +125,8 @@
 		<div class="beta-badge">
 			<img src="{base}/beta_version_banner.png" alt="Beta Version" />
 		</div>
-		<h2>YOUR PATH TO<br />STABLE DEFI INCOME</h2>
-		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
+<!--		<h2>WEB3 ACADEMY<br />PERSONAL AI-ASSISTANT</h2>-->
+<!--		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />-->
 	</div>
 
 
@@ -153,11 +153,11 @@
 					{#if message.sender === 'server' && message.type === 'text'}
 						<div class="message-actions">
 							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Копировать сообщение" title="Копировать сообщение">
-								<img src="{base}/copy-icon-white.png" alt="Copy"/>
+								<img src="{base}/copy-icon-w3a.png" alt="Copy"/>
 							</button>
 
 							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
-								<img src="{base}/speak-icon.png" alt="Speak"/>
+								<img src="{base}/speak-icon-w3a.png" alt="Speak"/>
 							</button>
 						</div>
 					{/if}
@@ -179,7 +179,9 @@
 			on:keydown={(e) => e.key === 'Enter' && sendMessage()}
 		/>
 
-		<button on:click={sendMessage} class="send-btn">Send</button>
+		<button on:click={sendMessage} class="send-btn">
+			<img src="{base}/mini-logo.png" alt="Send" />
+		</button>
 	</div>
 
 	<div class="basement">
