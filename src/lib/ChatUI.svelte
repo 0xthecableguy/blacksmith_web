@@ -180,7 +180,7 @@
 		/>
 
 		<button on:click={sendMessage} class="send-btn">
-			<img src="{base}/mini-logo.png" alt="Send" />
+			<img src="{base}/mini-logo_w3a.png" alt="Send" />
 		</button>
 	</div>
 
