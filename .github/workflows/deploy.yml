@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - deploy
+      - w3a_css_check
 jobs:
   deploy:
     runs-on: ubuntu-latest
