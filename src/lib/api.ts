@@ -14,7 +14,7 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Pr
 		user_id: payload.user_id
 	};
 
-	const response = await fetch('https://v3.spb.ru/blacksmith_web_user_request', {
+	const response = await fetch('https://api.blacksmith-lab.com/blacksmith_web_user_request', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Pr
 export const sendTextToSpeech = async (payload: TextToSpeechRequest): Promise<TextToSpeechResponse> => {
 	console.log('Sending TTS request:', payload);
 
-	const response = await fetch('https://v3.spb.ru/blacksmith_web_tts_request', {
+	const response = await fetch('https://api.blacksmith-lab.com/blacksmith_web_tts_request', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const sendTextToSpeech = async (payload: TextToSpeechRequest): Promise<Te
 export const fetchChatHistory = async (userId: string, app_name: string): Promise<ChatMessage[]> => {
 	console.log('Fetching chat history for user:', userId);
 
-	const response = await fetch(`https://v3.spb.ru/blacksmith_web_chat_fetch?user_id=${userId}&app_name=${app_name}`, {
+	const response = await fetch(`https://api.blacksmith-lab.com/blacksmith_web_chat_fetch?user_id=${userId}&app_name=${app_name}`, {
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 	});
