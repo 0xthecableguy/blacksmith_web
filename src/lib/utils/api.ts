@@ -4,7 +4,7 @@ import type {
 	ChatMessage,
 	TextToSpeechRequest,
 	TextToSpeechResponse
-} from '$lib/types';
+} from '$lib/types/types';
 
 export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Promise<BlacksmithServerResponse> => {
 	console.log('Sending request to server:', payload);
@@ -39,7 +39,7 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Pr
 	return data;
 };
 
-export const sendTextToSpeech = async (payload: TextToSpeechRequest): Promise<TextToSpeechResponse> => {
+export const requestTextToSpeech = async (payload: TextToSpeechRequest): Promise<TextToSpeechResponse> => {
 	console.log('Sending TTS request:', payload);
 
 	const response = await fetch('https://api.blacksmith-lab.com/blacksmith_web_tts_request', {

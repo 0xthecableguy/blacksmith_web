@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Chat from '$lib/ChatUI.svelte';
+	import Chat from '$lib/components/ChatUI.svelte';
 </script>
 
 <div class="page-container">
@@ -26,6 +26,6 @@
         background-position: center;
         background-repeat: no-repeat;
         align-items: center;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/background.jpg");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/chat_component_res/background.jpg");
     }
 </style>

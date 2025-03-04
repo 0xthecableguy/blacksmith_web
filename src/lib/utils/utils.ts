@@ -1,8 +1,8 @@
 import DOMPurify from 'dompurify';
-import { sendTextToSpeech } from '$lib/api';
+import { requestTextToSpeech } from '$lib/utils/api';
 import type { Writable } from 'svelte/store';
-import { TypingIndicator } from '$lib/typing-indicator';
-import { type Message } from '$lib/types';
+import { TypingIndicator } from '$lib/utils/typing-indicator';
+import { type Message } from '$lib/types/types';
 import { tick } from 'svelte';
 
 export function copyToClipboard(text: string) {
@@ -15,21 +15,22 @@ export async function speakMessage(
 	text: string,
 	userId: string,
 	messages: Writable<Message[]>,
-	scrollToBottom: () => Promise<void>
+	scrollToBottom: () => Promise<void>,
+	app_name: string,
 ) {
 	const typingIndicator = new TypingIndicator({
 		messages,
-		baseText: "🔊\u0020записывает аудио-сообщение"
+		baseText: "🔊 записывает аудио-сообщение"
 	});
 
 	typingIndicator.start();
 	await scrollToBottom();
 
 	try {
-		const response = await sendTextToSpeech({
+		const response = await requestTextToSpeech({
 			text,
 			user_id: userId,
-			app_name: "w3a_web"
+			app_name,
 		});
 
 		const audioBlob = base64ToBlob(response.audio_data, 'audio/mpeg');
