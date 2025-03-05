@@ -1,3 +1,5 @@
+<svelte:options customElement="blacksmithlab-chat-ui" />
+
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
@@ -22,6 +24,15 @@
 	let micNotice = false;
 
 	onMount(async () => {
+		console.log("basePath:", basePath);
+
+		const currentDomain = window.location.hostname;
+
+		if (currentDomain !== "0xthecableguy.github.io") {
+			basePath = "https://0xthecableguy.github.io/blacksmith_web/chat_component_res";
+			console.log("Using absolute path for resources:", basePath);
+		}
+
 		userId = getUserId();
 		console.log("User ID:", userId);
 
