@@ -1,5 +1,3 @@
-<svelte:options customElement="blacksmithlab-chat-ui" />
-
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
