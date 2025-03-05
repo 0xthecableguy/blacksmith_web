@@ -23,9 +23,10 @@
         box-sizing: border-box;
         justify-content: center;
         background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        /*background-position: center;*/
+        /*background-repeat: no-repeat;*/
         align-items: center;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/chat_component_res/background.jpg");
+				background: transparent;
+        /*background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/chat_component_res/background.jpg");*/
     }
 </style>
