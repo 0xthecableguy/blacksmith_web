@@ -1,5 +1,5 @@
 import type { Writable } from 'svelte/store';
-import type { Message } from './types';
+import type { Message } from '../types/types';
 
 interface TypingIndicatorConfig {
 	messages: Writable<Message[]>;
@@ -10,7 +10,7 @@ interface TypingIndicatorConfig {
 export class TypingIndicator {
 	private messages: Writable<Message[]>;
 	private isAnimating: boolean = false;
-	private intervalId?: number;
+	private intervalId?: number | NodeJS.Timeout;
 	private tempMessageId: number;
 	private dotsUpdateInterval: number;
 	private baseText: string;

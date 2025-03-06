@@ -1,28 +1,36 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import { sendMessageToServer, fetchChatHistory } from '$lib/api';
-	import type { BlacksmithServerResponse, MessageSender } from '$lib/types';
+	import { sendMessageToServer, fetchChatHistory } from '$lib/utils/api';
+	import type { BlacksmithServerResponse, MessageSender } from '$lib/types/types';
 	import { tick } from 'svelte';
-	import "./ChatUI.svelte.css";
-	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils';
-	import { TypingIndicator } from '$lib/typing-indicator';
+	import "../styles/ChatUI.svelte.css";
+	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils/utils';
+	import { TypingIndicator } from '$lib/utils/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
-	import type { Message } from '$lib/types';
-	import { base } from '$app/paths';
+	import type { Message } from '$lib/types/types';
 
+	export let app_name: string = "blacksmith_web";
+	export let basePath: string = "/blacksmith_web/chat_component_res";
 
 	const messages = writable<Message[]>([]);
 	let userMessage = '';
 	let messagesContainer: HTMLDivElement;
 	let userId: string;
-	let app_name = "w3a_web";
 	let showCookieNotice = true;
 	let wavesurfers: WaveSurfer[] = [];
-
 	let micNotice = false;
 
 	onMount(async () => {
+		console.log("basePath:", basePath);
+
+		const currentDomain = window.location.hostname;
+
+		if (currentDomain !== "0xthecableguy.github.io") {
+			basePath = "https://0xthecableguy.github.io/blacksmith_web/chat_component_res";
+			console.log("Using absolute path for resources:", basePath);
+		}
+
 		userId = getUserId();
 		console.log("User ID:", userId);
 
@@ -41,7 +49,7 @@
 
 			await scrollToBottom();
 		} catch (error) {
-			console.error("Error processing chat history fetching request:", error);
+			console.error("Error fetching chat history:", error);
 		}
 	});
 
@@ -66,14 +74,14 @@
 			const response: BlacksmithServerResponse = await sendMessageToServer({
 				text: userText,
 				user_id: userId,
-				app_name: "w3a_web"
+				app_name
 			});
 
 			typingIndicator.stop(response.text);
 			await scrollToBottom();
 		} catch (error) {
 			console.error('Error sending request to server:', error);
-			typingIndicator.stop("Произошла ошибка при отправке сообщения");
+			typingIndicator.stop("Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже");
 		}
 	}
 
@@ -91,22 +99,25 @@
 	function initAudioPlayer(container: HTMLDivElement, audioUrl: string) {
 		if (!audioUrl) return;
 
-		const wavesurfer = WaveSurfer.create({
-			container,
-			height: 48,
-			waveColor: 'rgba(62, 73, 101, 0.4)',
-			progressColor: 'rgba(62, 73, 101, 0.8)',
-			cursorColor: 'rgba(62, 73, 101, 0.8)',
-			barWidth: 2,
-			barGap: 1,
-			barRadius: 3,
+		const options = {
+			container: container,
+
+			waveColor: '#6578fe',
+			progressColor: '#bec5fc',
+			cursorColor: '#d5deff',
+			backgroundColor: '#d5deff',
+			mediaControls: true,
+			height: 64,
+			interact: true,
+			dragToSeek: false,
+			hideScrollbar: false,
+			autoScroll: true,
+			autoCenter: true,
 			normalize: true,
 			fillParent: true,
-			autoplay: false,
-			interact: true,
-			dragToSeek: true,
-			mediaControls: true
-		});
+		}
+
+		const wavesurfer = WaveSurfer.create(options);
 
 		wavesurfer.load(audioUrl);
 		wavesurfers.push(wavesurfer);
@@ -122,13 +133,7 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
-		<div class="beta-badge">
-			<img src="{base}/beta_version_banner.png" alt="Beta Version" />
-		</div>
-		<h2>YOUR PATH TO<br />STABLE DEFI INCOME</h2>
-		<img src="{base}/w3a_logo.png" alt="Chat Logo" class="chat-logo" />
 	</div>
-
 
 	<div class="messages-container" bind:this={messagesContainer}>
 		{#each $messages as message}
@@ -152,12 +157,12 @@
 
 					{#if message.sender === 'server' && message.type === 'text'}
 						<div class="message-actions">
-							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Копировать сообщение" title="Копировать сообщение">
-								<img src="{base}/copy-icon-white.png" alt="Copy"/>
+							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Copy" title="Copy message">
+								<img src="{basePath}/copy_icon.png" alt="Copy"/>
 							</button>
 
-							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom)} aria-label="Озвучить сообщение" title="Озвучить сообщение">
-								<img src="{base}/speak-icon.png" alt="Speak"/>
+							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom, app_name)} aria-label="Voice message" title="Voice message">
+								<img src="{basePath}/speak_icon.png" alt="Speak"/>
 							</button>
 						</div>
 					{/if}
@@ -168,7 +173,7 @@
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
-			<img src="{base}/mic.png" alt="voice message"/>
+			<img src="{basePath}/mic_icon.png" alt="Voice Message"/>
 		</button>
 
 		<input
@@ -179,11 +184,13 @@
 			on:keydown={(e) => e.key === 'Enter' && sendMessage()}
 		/>
 
-		<button on:click={sendMessage} class="send-btn">Send</button>
+		<button on:click={sendMessage} class="send-btn">
+			<img src="{basePath}/mini_logo.png" alt="Send" />
+		</button>
 	</div>
 
 	<div class="basement">
-		<img src="{base}/logo_black.png" alt="Chat Logo" class="basement-logo" />
+		<img src="{basePath}/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
 	</div>
 
 	{#if micNotice}
