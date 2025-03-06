@@ -102,8 +102,8 @@
 		const options = {
 			container: container,
 
-			waveColor: '#6578fe',
-			progressColor: '#bec5fc',
+			waveColor: '#83a2ce',
+			progressColor: '#d5deff',
 			cursorColor: '#d5deff',
 			backgroundColor: '#d5deff',
 			mediaControls: true,
@@ -133,6 +133,7 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
+		<img src="{basePath}/astronaut-icon.png" alt="Person" class="banner-person">
 	</div>
 
 	<div class="messages-container" bind:this={messagesContainer}>

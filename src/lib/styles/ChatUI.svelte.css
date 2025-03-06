@@ -29,6 +29,17 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
+.banner-person {
+    position: absolute;
+    bottom: 10%;
+    left: 80%;
+    transform: translateX(-50%);
+    height: 80%;
+    width: auto;
+    pointer-events: none;
+    z-index: 10;
+}
+
 .basement-logo {
     width: auto;
     height: 20px;
