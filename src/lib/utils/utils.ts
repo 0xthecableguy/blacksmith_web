@@ -108,7 +108,7 @@ function generateUserId(): string {
 function setCookie(name: string, value: string, days: number) {
 	const expires = new Date();
 	expires.setDate(expires.getDate() + days);
-	document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+	document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
 }
 
 function getCookie(name: string): string | null {
