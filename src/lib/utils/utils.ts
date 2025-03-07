@@ -93,16 +93,50 @@ export function sanitize(html: string) {
 }
 
 export function getUserId(): string {
-	const existingUserId = getCookie("userId");
-	if (existingUserId) return existingUserId;
+	const localStorageId = localStorage.getItem("userId");
+	if (localStorageId) return localStorageId;
+
+	const cookieId = getCookie("userId");
+	if (cookieId) {
+		localStorage.setItem("userId", cookieId);
+		return cookieId;
+	}
 
 	const newUserId = generateUserId();
-	setCookie("userId", newUserId, 365);
+
+	try {
+		localStorage.setItem("userId", newUserId);
+	} catch (e) {
+		console.error("Failed to save to localStorage:", e);
+	}
+
+	try {
+		setCookie("userId", newUserId, 365);
+	} catch (e) {
+		console.error("Failed to set cookie:", e);
+	}
+
 	return newUserId;
 }
 
 function generateUserId(): string {
-	return crypto.randomUUID();
+	if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+		return crypto.randomUUID();
+	}
+
+	if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+		const array = new Uint8Array(16);
+		crypto.getRandomValues(array);
+
+		return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
+			.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
+	}
+
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		const r = Math.random() * 16 | 0;
+		const v = c === 'x' ? r : (r & 0x3 | 0x8);
+		return v.toString(16);
+	});
 }
 
 function setCookie(name: string, value: string, days: number) {
