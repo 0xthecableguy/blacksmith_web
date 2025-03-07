@@ -13,7 +13,7 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
-        font-family: 'Questrial', sans-serif;
+        /*font-family: 'Questrial', sans-serif;*/
     }
 
 		.page-container {

@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'GothamPro';
+    src: url('/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 .chat-box {
     /*width: clamp(300px, 90%, 800px);*/
     /*height: clamp(500px, 95vh, 1500px);*/
@@ -126,6 +133,7 @@
     max-width: 100%;
     min-width: 100%;
     animation: fadeIn 0.5s ease-out forwards;
+    font-family: 'GothamPro', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -144,7 +152,7 @@
     color: black;
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    /*border: 1px solid rgba(255, 255, 255, 0.5);*/
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -153,7 +161,7 @@
     color: black;
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    /*border: 1px solid rgba(255, 255, 255, 0.5);*/
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -220,7 +228,7 @@
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    font-family: 'Questrial', sans-serif;
+    font-family: 'GothamPro', sans-serif;
     font-size: 16px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
@@ -236,8 +244,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-family: 'Questrial', sans-serif;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
@@ -323,6 +329,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    font-family: 'GothamPro', sans-serif;
 }
 
 @keyframes fadeInOut {
