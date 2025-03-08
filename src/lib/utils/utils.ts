@@ -93,27 +93,55 @@ export function sanitize(html: string) {
 }
 
 export function getUserId(): string {
+	const isInIframe = window.self !== window.top;
+	console.log("Component initialized in iframe:", isInIframe);
+
+	if (isInIframe) {
+		const sessionId = sessionStorage.getItem("userId");
+		if (sessionId) {
+			console.log("Using userId from sessionStorage:", sessionId);
+			return sessionId;
+		}
+	}
+
 	const localStorageId = localStorage.getItem("userId");
-	if (localStorageId) return localStorageId;
+	if (localStorageId) {
+		console.log("Using userId from localStorage:", localStorageId);
+
+		if (isInIframe) {
+			sessionStorage.setItem("userId", localStorageId);
+		}
+
+		return localStorageId;
+	}
 
 	const cookieId = getCookie("userId");
 	if (cookieId) {
-		localStorage.setItem("userId", cookieId);
+		console.log("Using userId from cookie:", cookieId);
+
+		try {
+			localStorage.setItem("userId", cookieId);
+			if (isInIframe) {
+				sessionStorage.setItem("userId", cookieId);
+			}
+		} catch (e) {
+			console.error("Error saving to storage:", e);
+		}
+
 		return cookieId;
 	}
 
 	const newUserId = generateUserId();
+	console.log("Created new userId:", newUserId);
 
 	try {
 		localStorage.setItem("userId", newUserId);
-	} catch (e) {
-		console.error("Failed to save to localStorage:", e);
-	}
-
-	try {
+		if (isInIframe) {
+			sessionStorage.setItem("userId", newUserId);
+		}
 		setCookie("userId", newUserId, 365);
 	} catch (e) {
-		console.error("Failed to set cookie:", e);
+		console.error("Error saving userId:", e);
 	}
 
 	return newUserId;
@@ -150,7 +178,16 @@ function getCookie(name: string): string | null {
 	return match ? match[2] : null;
 }
 
-export function acceptCookies(): boolean {
+export function acceptCookies(onAccepted?: () => void) {
 	localStorage.setItem("cookie_consent", "true");
-	return false;
+
+	if (window.self !== window.top) {
+		sessionStorage.setItem("cookie_consent", "true");
+	}
+
+	setCookie("cookie_consent", "true", 365);
+
+	if (onAccepted) {
+		onAccepted();
+	}
 }

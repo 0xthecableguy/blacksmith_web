@@ -34,7 +34,13 @@
 		userId = getUserId();
 		console.log("User ID:", userId);
 
-		const cookieConsent = localStorage.getItem("cookie_consent");
+		const isInIframe = window.self !== window.top;
+		let cookieConsent = localStorage.getItem("cookie_consent");
+
+		if (isInIframe && !cookieConsent) {
+			cookieConsent = sessionStorage.getItem("cookie_consent");
+		}
+
 		if (cookieConsent === "true") {
 			showCookieNotice = false;
 		}
@@ -117,7 +123,9 @@
 	}
 
 	function handleAcceptCookies() {
-		showCookieNotice = acceptCookies();
+		acceptCookies(() => {
+			showCookieNotice = false;
+		});
 	}
 
 	function initAudioPlayer(container: HTMLDivElement, audioUrl: string) {
