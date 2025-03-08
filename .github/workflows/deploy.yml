@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - code_clean_up
+      - cookies_fix
 jobs:
   deploy:
     runs-on: ubuntu-latest

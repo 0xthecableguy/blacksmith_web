@@ -41,15 +41,39 @@
 
 		try {
 			const chatHistory = await fetchChatHistory(userId, app_name);
-			messages.set(chatHistory.map(msg => ({
+
+			const formattedHistory = chatHistory.map(msg => ({
 				text: msg.message,
 				sender: msg.sender as MessageSender,
-				type: 'text'
-			})));
+				type: 'text' as const
+			}));
+
+			if (formattedHistory.length === 0) {
+				messages.set([{
+					text: "Привет! Я jAison, ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
+					sender: 'server',
+					type: 'text' as const
+				}]);
+			} else {
+				messages.set([
+					...formattedHistory,
+					{
+						text: "С возвращением!\nЧем могу быть полезен? 😁️",
+						sender: 'server',
+						type: 'text' as const
+					}
+				]);
+			}
 
 			await scrollToBottom();
 		} catch (error) {
 			console.error("Error fetching chat history:", error);
+
+			messages.set([{
+				text: "Привет! Я Джейсон, ваш виртуальный помощник.\nК сожалению, мне не удалось загрузить историю сообщений, давайте попробуем начать общение сначала.",
+				sender: 'server',
+				type: 'text' as const
+			}]);
 		}
 	});
 
