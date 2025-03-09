@@ -97,38 +97,41 @@ export function getUserId(): string {
 	console.log("Component initialized in iframe:", isInIframe);
 
 	if (isInIframe) {
-		const sessionId = sessionStorage.getItem("userId");
-		if (sessionId) {
-			console.log("Using userId from sessionStorage:", sessionId);
-			return sessionId;
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlUserId = urlParams.get('userId');
+		if (urlUserId) {
+			console.log("Using userId from URL parameter:", urlUserId);
+
+			try {
+				localStorage.setItem("userId", urlUserId);
+				sessionStorage.setItem("userId", urlUserId);
+			} catch (e) {
+				console.error("Error saving userId to storage:", e);
+			}
+
+			return urlUserId;
 		}
 	}
 
+	const sessionId = isInIframe ? sessionStorage.getItem("userId") : null;
 	const localStorageId = localStorage.getItem("userId");
-	if (localStorageId) {
-		console.log("Using userId from localStorage:", localStorageId);
-
-		if (isInIframe) {
-			sessionStorage.setItem("userId", localStorageId);
-		}
-
-		return localStorageId;
-	}
-
 	const cookieId = getCookie("userId");
-	if (cookieId) {
-		console.log("Using userId from cookie:", cookieId);
+
+	const existingId = sessionId || localStorageId || cookieId;
+
+	if (existingId) {
+		console.log("Using existing userId:", existingId);
 
 		try {
-			localStorage.setItem("userId", cookieId);
+			localStorage.setItem("userId", existingId);
 			if (isInIframe) {
-				sessionStorage.setItem("userId", cookieId);
+				sessionStorage.setItem("userId", existingId);
 			}
 		} catch (e) {
 			console.error("Error saving to storage:", e);
 		}
 
-		return cookieId;
+		return existingId;
 	}
 
 	const newUserId = generateUserId();
@@ -173,7 +176,7 @@ function setCookie(name: string, value: string, days: number) {
 	document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
 }
 
-function getCookie(name: string): string | null {
+export function getCookie(name: string): string | null {
 	const match = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return match ? match[2] : null;
 }

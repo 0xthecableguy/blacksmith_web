@@ -9,6 +9,7 @@
 	import { TypingIndicator } from '$lib/utils/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
 	import type { Message } from '$lib/types/types';
+	import { getCookie } from '$lib/utils/utils';
 
 	export let app_name: string = "blacksmith_web";
 	export let basePath: string = "/blacksmith_web/chat_component_res";
@@ -34,20 +35,30 @@
 		userId = getUserId();
 		console.log("User ID:", userId);
 
-		const isInIframe = window.self !== window.top;
-		let cookieConsent = localStorage.getItem("cookie_consent");
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlCookieConsent = urlParams.get('cookieConsent');
 
-		if (isInIframe && !cookieConsent) {
-			cookieConsent = sessionStorage.getItem("cookie_consent");
-		}
-
-		if (cookieConsent === "true") {
+		if (urlCookieConsent === "true") {
 			showCookieNotice = false;
+			try {
+				localStorage.setItem("cookie_consent", "true");
+				sessionStorage.setItem("cookie_consent", "true");
+			} catch (e) {
+				console.error("Error saving cookie consent from URL:", e);
+			}
+		} else {
+			const isInIframe = window.self !== window.top;
+			const localStorageConsent = localStorage.getItem("cookie_consent");
+			const sessionStorageConsent = isInIframe ? sessionStorage.getItem("cookie_consent") : null;
+			const cookieConsent = getCookie("cookie_consent");
+
+			if (localStorageConsent === "true" || sessionStorageConsent === "true" || cookieConsent === "true") {
+				showCookieNotice = false;
+			}
 		}
 
 		try {
 			const chatHistory = await fetchChatHistory(userId, app_name);
-
 			const formattedHistory = chatHistory.map(msg => ({
 				text: msg.message,
 				sender: msg.sender as MessageSender,
@@ -56,7 +67,7 @@
 
 			if (formattedHistory.length === 0) {
 				messages.set([{
-					text: "Привет! Я jAison, ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
+					text: "Привет! Я Джейсон, ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
 					sender: 'server',
 					type: 'text' as const
 				}]);
