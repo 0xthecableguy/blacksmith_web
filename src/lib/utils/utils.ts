@@ -183,12 +183,18 @@ export function getCookie(name: string): string | null {
 
 export function acceptCookies(onAccepted?: () => void) {
 	localStorage.setItem("cookie_consent", "true");
+	sessionStorage.setItem("cookie_consent", "true");
 
 	if (window.self !== window.top) {
-		sessionStorage.setItem("cookie_consent", "true");
+		try {
+			window.parent.postMessage({
+				type: "cookieConsentAccepted",
+				value: true
+			}, "https://www.blacksmith-lab.com");
+		} catch (e) {
+			console.error("Error sending message to parent:", e);
+		}
 	}
-
-	setCookie("cookie_consent", "true", 365);
 
 	if (onAccepted) {
 		onAccepted();
