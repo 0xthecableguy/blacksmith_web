@@ -221,7 +221,7 @@
 
 .mic-btn img {
     width: auto;
-    height: 80%;
+    height: 70%;
 }
 
 .mic-btn:hover {
@@ -259,7 +259,7 @@
 
 .send-btn img {
     width: auto;
-    height: 80%;
+    height: 60%;
 }
 
 .send-btn:hover {
@@ -279,6 +279,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 80%;
     max-width: 80%;
     z-index: 1000;
