@@ -47,7 +47,7 @@
 .banner-person {
     position: absolute;
     bottom: 10%;
-    left: 90%;
+    left: 85%;
     transform: translateX(-50%);
     height: 60%;
     width: auto;
@@ -285,11 +285,11 @@
     z-index: 1000;
 }
 
-
 .cookie-notice p {
     margin: 0;
     font-size: 14px;
-    text-align: left;
+    text-align: center;
+    flex-grow: 1;
 }
 
 .cookie-notice button {

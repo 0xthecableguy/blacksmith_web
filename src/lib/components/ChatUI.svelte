@@ -152,9 +152,9 @@
 		const options = {
 			container: container,
 
-			waveColor: '#83a2ce',
-			progressColor: '#d5deff',
-			cursorColor: '#d5deff',
+			waveColor: '#5608fe',
+			progressColor: '#ffffff',
+			cursorColor: '#ffffff',
 			backgroundColor: '#d5deff',
 			mediaControls: true,
 			height: 64,
