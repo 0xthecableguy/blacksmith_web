@@ -4,7 +4,7 @@
 	import { sendMessageToServer, fetchChatHistory } from '$lib/utils/api';
 	import type { BlacksmithServerResponse, MessageSender } from '$lib/types/types';
 	import { tick } from 'svelte';
-	import "../styles/ChatUI.svelte.css";
+	// import "../styles/ChatUI.svelte.css";
 	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils/utils';
 	import { TypingIndicator } from '$lib/utils/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
