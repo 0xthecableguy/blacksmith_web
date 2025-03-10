@@ -26,6 +26,7 @@
 	onMount(async () => {
 		console.log("app_name:", app_name);
 		console.log("basePath:", basePath);
+		console.log("cssPath:", config.cssPath);
 
 		const linkElement = document.createElement('link');
 		linkElement.rel = 'stylesheet';
