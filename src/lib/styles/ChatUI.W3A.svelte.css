@@ -13,14 +13,16 @@
 }
 
 .chat-box {
-    width: clamp(300px, 85%, 800px);
-    height: clamp(500px, 90vh, 1500px);
+    /*width: clamp(300px, 90%, 800px);*/
+    /*height: clamp(500px, 95vh, 1500px);*/
+    width: 100%;
+    height: 100%;
     border-radius: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.7);
     padding: 15px;
 }
 
@@ -38,6 +40,18 @@
     box-sizing: border-box;
     overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.banner-person {
+    position: absolute;
+    bottom: 10%;
+    left: 90%;
+    transform: translateX(-50%);
+    height: 60%;
+    width: auto;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .basement-logo {
@@ -129,20 +143,18 @@
 }
 
 .server-message .message {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.6);
     color: black;
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .user-message .message {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.6);
     color: black;
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -171,6 +183,7 @@
     display: flex;
     align-items: center;
     background: transparent;
+    margin-top: auto;
     height: 4%;
     justify-content: space-between;
     gap: 2%;
@@ -249,9 +262,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    gap: 15px;
-    width: auto;
+    width: 80%;
     max-width: 80%;
+    z-index: 1000;
 }
 
 
@@ -270,6 +283,7 @@
     cursor: pointer;
     font-weight: bold;
     font-family: 'Questrial', sans-serif;
+    margin-right: auto;
 }
 
 .cookie-notice button:hover {
