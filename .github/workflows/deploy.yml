@@ -25,6 +25,8 @@ jobs:
       - name: Build Blacksmith Lab web UI
         run: |
           cp config/blacksmith-web-config.ts src/lib/config.ts
+          mkdir -p static/styles
+          cp src/styles/ChatUI.svelte.css static/styles/
           npm run build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -56,6 +58,8 @@ jobs:
         run: |
           cp config/w3a-config.ts src/lib/config.ts
           sed -i "s|base: .*|base: '/blacksmith_web/w3a_web'|" svelte.config.js
+          mkdir -p static/styles
+          cp src/styles/ChatUI.W3A.svelte.css static/styles/
           npm run build
       - name: Deploy w3a_web version to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

@@ -27,7 +27,10 @@
 		console.log("app_name:", app_name);
 		console.log("basePath:", basePath);
 
-		await import(/* @vite-ignore */ config.cssPath);
+		const linkElement = document.createElement('link');
+		linkElement.rel = 'stylesheet';
+		linkElement.href = config.cssPath;
+		document.head.appendChild(linkElement);
 
 		const currentDomain = window.location.hostname;
 
