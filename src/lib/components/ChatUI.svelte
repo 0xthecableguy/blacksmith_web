@@ -10,9 +10,10 @@
 	import WaveSurfer from 'wavesurfer.js';
 	import type { Message } from '$lib/types/types';
 	import { getCookie } from '$lib/utils/utils';
+	import { config } from '$lib/config'
 
-	export let app_name: string = "blacksmith_web";
-	export let basePath: string = "/blacksmith_web/chat_component_res";
+	export let app_name: string = config.app_name;
+	export let basePath: string = config.basePath;
 
 	const messages = writable<Message[]>([]);
 	let userMessage = '';
@@ -23,12 +24,15 @@
 	let micNotice = false;
 
 	onMount(async () => {
+		console.log("app_name:", app_name);
 		console.log("basePath:", basePath);
+
+		await import(/* @vite-ignore */ config.cssPath);
 
 		const currentDomain = window.location.hostname;
 
 		if (currentDomain !== "0xthecableguy.github.io") {
-			basePath = "https://0xthecableguy.github.io/blacksmith_web/chat_component_res";
+			basePath = "https://0xthecableguy.github.io" + basePath;
 			console.log("Using absolute path for resources:", basePath);
 		}
 
