@@ -93,27 +93,58 @@ export function sanitize(html: string) {
 }
 
 export function getUserId(): string {
-	const localStorageId = localStorage.getItem("userId");
-	if (localStorageId) return localStorageId;
+	const isInIframe = window.self !== window.top;
+	console.log("Component initialized in iframe:", isInIframe);
 
+	if (isInIframe) {
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlUserId = urlParams.get('userId');
+		if (urlUserId) {
+			console.log("Using userId from URL parameter:", urlUserId);
+
+			try {
+				localStorage.setItem("userId", urlUserId);
+				sessionStorage.setItem("userId", urlUserId);
+			} catch (e) {
+				console.error("Error saving userId to storage:", e);
+			}
+
+			return urlUserId;
+		}
+	}
+
+	const sessionId = isInIframe ? sessionStorage.getItem("userId") : null;
+	const localStorageId = localStorage.getItem("userId");
 	const cookieId = getCookie("userId");
-	if (cookieId) {
-		localStorage.setItem("userId", cookieId);
-		return cookieId;
+
+	const existingId = sessionId || localStorageId || cookieId;
+
+	if (existingId) {
+		console.log("Using existing userId:", existingId);
+
+		try {
+			localStorage.setItem("userId", existingId);
+			if (isInIframe) {
+				sessionStorage.setItem("userId", existingId);
+			}
+		} catch (e) {
+			console.error("Error saving to storage:", e);
+		}
+
+		return existingId;
 	}
 
 	const newUserId = generateUserId();
+	console.log("Created new userId:", newUserId);
 
 	try {
 		localStorage.setItem("userId", newUserId);
-	} catch (e) {
-		console.error("Failed to save to localStorage:", e);
-	}
-
-	try {
+		if (isInIframe) {
+			sessionStorage.setItem("userId", newUserId);
+		}
 		setCookie("userId", newUserId, 365);
 	} catch (e) {
-		console.error("Failed to set cookie:", e);
+		console.error("Error saving userId:", e);
 	}
 
 	return newUserId;
@@ -145,12 +176,27 @@ function setCookie(name: string, value: string, days: number) {
 	document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
 }
 
-function getCookie(name: string): string | null {
+export function getCookie(name: string): string | null {
 	const match = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
 	return match ? match[2] : null;
 }
 
-export function acceptCookies(): boolean {
+export function acceptCookies(onAccepted?: () => void) {
 	localStorage.setItem("cookie_consent", "true");
-	return false;
+	sessionStorage.setItem("cookie_consent", "true");
+
+	if (window.self !== window.top) {
+		try {
+			window.parent.postMessage({
+				type: "cookieConsentAccepted",
+				value: true
+			}, "https://www.blacksmith-lab.com");
+		} catch (e) {
+			console.error("Error sending message to parent:", e);
+		}
+	}
+
+	if (onAccepted) {
+		onAccepted();
+	}
 }

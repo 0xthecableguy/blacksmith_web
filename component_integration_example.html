@@ -1,0 +1,146 @@
+<script>
+	window.addEventListener("message", function(event) {
+		if (event.origin !== "https://0xthecableguy.github.io") return;
+
+		const data = event.data;
+		if (data && data.type === "cookieConsentAccepted") {
+			localStorage.setItem("chatCookieConsent", "true");
+		}
+	});
+
+	function openChatPopup() {
+		if (document.getElementById("chat-popup")) return;
+
+		let userId = localStorage.getItem("chatUserId");
+		if (!userId) {
+			userId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				const r = Math.random() * 16 | 0;
+				const v = c === 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+			});
+			localStorage.setItem("chatUserId", userId);
+		}
+
+		const cookieConsent = localStorage.getItem("chatCookieConsent") === "true" ? "true" : "false";
+
+		const iframeUrl = `https://0xthecableguy.github.io/blacksmith_web/?userId=${encodeURIComponent(userId)}&cookieConsent=${cookieConsent}`;
+
+		const popupWrapper = document.createElement("div");
+		popupWrapper.id = "chat-popup-wrapper";
+		popupWrapper.style.position = "fixed";
+		popupWrapper.style.top = "0";
+		popupWrapper.style.left = "0";
+		popupWrapper.style.width = "100vw";
+		popupWrapper.style.height = "100vh";
+		popupWrapper.style.background = "rgba(0, 0, 0, 0.5)";
+		popupWrapper.style.display = "flex";
+		popupWrapper.style.alignItems = "center";
+		popupWrapper.style.justifyContent = "center";
+		popupWrapper.style.zIndex = "9999";
+		popupWrapper.style.opacity = "0";
+		popupWrapper.style.transition = "opacity 0.3s ease";
+
+		setTimeout(() => {
+			popupWrapper.style.opacity = "1";
+		}, 10);
+
+		const popup = document.createElement("div");
+		popup.id = "chat-popup";
+		popup.style.position = "relative";
+		popup.style.width = "clamp(300px, 90%, 800px)";
+		popup.style.height = "clamp(500px, 95vh, 1500px)";
+		popup.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.3)";
+		popup.style.borderRadius = "10px";
+		popup.style.overflow = "hidden";
+		popup.style.background = "transparent";
+		popup.style.transform = "scale(0.9)";
+		popup.style.transition = "transform 0.3s ease";
+
+		setTimeout(() => {
+			popup.style.transform = "scale(1)";
+		}, 10);
+
+		const iframe = document.createElement("iframe");
+		iframe.src = iframeUrl;
+		iframe.style.width = "100%";
+		iframe.style.height = "100%";
+		iframe.style.border = "none";
+		iframe.allow = "clipboard-write";
+
+		popup.appendChild(iframe);
+		popupWrapper.appendChild(popup);
+		document.body.appendChild(popupWrapper);
+
+		popupWrapper.onclick = (e) => {
+			if (e.target === popupWrapper) closeChatPopup();
+		};
+	}
+
+	function closeChatPopup() {
+		const popupWrapper = document.getElementById("chat-popup-wrapper");
+		if (!popupWrapper) return;
+
+		popupWrapper.style.opacity = "0";
+		popupWrapper.firstChild.style.transform = "scale(0.9)";
+
+		setTimeout(() => {
+			if (popupWrapper.parentNode) {
+				popupWrapper.parentNode.removeChild(popupWrapper);
+			}
+		}, 300);
+	}
+</script>
+
+<button onclick="openChatPopup()" class="chat-button">
+	<img src="https://0xthecableguy.github.io/blacksmith_web/blacksmith_web_res/chat_component_res/brain-icon.png"
+			 alt="AI">
+</button>
+
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .chat-button {
+        position: fixed;
+        bottom: 130px;
+        right: 30px;
+        width: 80px;
+        height: 80px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s ease;
+        z-index: 9999;
+        background: transparent;
+        padding: 0;
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    .chat-button img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        pointer-events: auto;
+    }
+
+    .chat-button:hover {
+        animation: pulse 0.5s infinite ease-in-out;
+        transform: scale(1.2);
+    }
+
+    .chat-button:active {
+        animation: none;
+        transform: scale(1);
+    }
+</style>

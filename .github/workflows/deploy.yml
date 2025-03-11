@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - cookies_fix
+      - cookie_fix_2
 jobs:
-  deploy:
+  deploy-main:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,10 +22,48 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm install
-      - name: Build project
-        run: npm run build
+      - name: Build Blacksmith Lab web UI
+        run: |
+          cp config/blacksmith-web-config.ts src/lib/config.ts
+          mkdir -p static/styles
+          cp src/lib/styles/ChatUI.svelte.css static/styles/
+          npm run build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+          destination_dir: .
+
+  deploy-w3a-web:
+    runs-on: ubuntu-latest
+    needs: deploy-main
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm install
+      - name: Build W3A web
+        run: |
+          cp config/w3a-config.ts src/lib/config.ts
+          sed -i "s|base: .*|base: '/blacksmith_web/w3a_web'|" svelte.config.js
+          mkdir -p static/styles
+          cp src/lib/styles/ChatUI.W3A.svelte.css static/styles/
+          npm run build
+      - name: Deploy w3a_web version to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          destination_dir: w3a_web

@@ -4,14 +4,15 @@
 	import { sendMessageToServer, fetchChatHistory } from '$lib/utils/api';
 	import type { BlacksmithServerResponse, MessageSender } from '$lib/types/types';
 	import { tick } from 'svelte';
-	import "../styles/ChatUI.svelte.css";
 	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils/utils';
 	import { TypingIndicator } from '$lib/utils/typing-indicator';
 	import WaveSurfer from 'wavesurfer.js';
 	import type { Message } from '$lib/types/types';
+	import { getCookie } from '$lib/utils/utils';
+	import { config } from '$lib/config'
 
-	export let app_name: string = "blacksmith_web";
-	export let basePath: string = "/blacksmith_web/chat_component_res";
+	export let app_name: string = config.app_name;
+	export let basePath: string = config.basePath;
 
 	const messages = writable<Message[]>([]);
 	let userMessage = '';
@@ -22,26 +23,49 @@
 	let micNotice = false;
 
 	onMount(async () => {
+		console.log("app_name:", app_name);
 		console.log("basePath:", basePath);
+		console.log("cssPath:", config.cssPath);
+
+		const linkElement = document.createElement('link');
+		linkElement.rel = 'stylesheet';
+		linkElement.href = config.cssPath;
+		document.head.appendChild(linkElement);
 
 		const currentDomain = window.location.hostname;
 
 		if (currentDomain !== "0xthecableguy.github.io") {
-			basePath = "https://0xthecableguy.github.io/blacksmith_web/chat_component_res";
+			basePath = "https://0xthecableguy.github.io" + basePath;
 			console.log("Using absolute path for resources:", basePath);
 		}
 
 		userId = getUserId();
 		console.log("User ID:", userId);
 
-		const cookieConsent = localStorage.getItem("cookie_consent");
-		if (cookieConsent === "true") {
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlCookieConsent = urlParams.get('cookieConsent');
+
+		if (urlCookieConsent === "true") {
 			showCookieNotice = false;
+			try {
+				localStorage.setItem("cookie_consent", "true");
+				sessionStorage.setItem("cookie_consent", "true");
+			} catch (e) {
+				console.error("Error saving cookie consent from URL:", e);
+			}
+		} else {
+			const isInIframe = window.self !== window.top;
+			const localStorageConsent = localStorage.getItem("cookie_consent");
+			const sessionStorageConsent = isInIframe ? sessionStorage.getItem("cookie_consent") : null;
+			const cookieConsent = getCookie("cookie_consent");
+
+			if (localStorageConsent === "true" || sessionStorageConsent === "true" || cookieConsent === "true") {
+				showCookieNotice = false;
+			}
 		}
 
 		try {
 			const chatHistory = await fetchChatHistory(userId, app_name);
-
 			const formattedHistory = chatHistory.map(msg => ({
 				text: msg.message,
 				sender: msg.sender as MessageSender,
@@ -50,7 +74,7 @@
 
 			if (formattedHistory.length === 0) {
 				messages.set([{
-					text: "Привет! Я jAison, ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
+					text: "Привет! Я ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
 					sender: 'server',
 					type: 'text' as const
 				}]);
@@ -70,7 +94,7 @@
 			console.error("Error fetching chat history:", error);
 
 			messages.set([{
-				text: "Привет! Я Джейсон, ваш виртуальный помощник.\nК сожалению, мне не удалось загрузить историю сообщений, давайте попробуем начать общение сначала.",
+				text: "Привет! Я ваш виртуальный помощник.\nК сожалению, мне не удалось загрузить историю сообщений, давайте попробуем начать общение сначала.",
 				sender: 'server',
 				type: 'text' as const
 			}]);
@@ -117,7 +141,9 @@
 	}
 
 	function handleAcceptCookies() {
-		showCookieNotice = acceptCookies();
+		acceptCookies(() => {
+			showCookieNotice = false;
+		});
 	}
 
 	function initAudioPlayer(container: HTMLDivElement, audioUrl: string) {
@@ -126,9 +152,9 @@
 		const options = {
 			container: container,
 
-			waveColor: '#83a2ce',
-			progressColor: '#d5deff',
-			cursorColor: '#d5deff',
+			waveColor: '#5608fe',
+			progressColor: '#ffffff',
+			cursorColor: '#ffffff',
 			backgroundColor: '#d5deff',
 			mediaControls: true,
 			height: 64,
@@ -157,7 +183,7 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
-		<img src="{basePath}/astronaut-icon.png" alt="Person" class="banner-person">
+		<img src="{basePath}/person-icon.png" alt="Person" class="banner-person">
 	</div>
 
 	<div class="messages-container" bind:this={messagesContainer}>
