@@ -42,4 +42,3 @@ pnpm-debug.log*
 #
 package-lock.json
 /chat-component-package/
-tilda_integration.html
