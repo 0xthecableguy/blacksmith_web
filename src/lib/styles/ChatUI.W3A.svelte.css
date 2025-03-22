@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'DrukTextWideCyr';
-    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/DrukTextWideCyr-Medium.otf') format('opentype');
+    src: url('/w3a_web_res/chat_component_res/fonts/DrukTextWideCyr-Medium.otf') format('opentype');
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'GothamPro';
-    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
+    src: url('/w3a_web_res/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
@@ -32,7 +32,7 @@
     width: 100%;
     max-width: 100%;
     height: clamp(100px, 14%, 200px);
-    background-image: url("/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/header_banner.png");
+    background-image: url("/w3a_web_res/chat_component_res/header_banner.png");
     background-size: 100% auto;
     background-position: left;
     background-repeat: no-repeat;
@@ -44,39 +44,6 @@
     z-index: 1;
 }
 
-.banner-person {
-    position: absolute;
-    bottom: 10%;
-    left: 85%;
-    transform: translateX(-50%);
-    height: 60%;
-    width: auto;
-    pointer-events: none;
-    z-index: 2;
-    animation: wiggle 3s ease-in-out 5s infinite,
-    float 7s ease-in-out infinite;
-}
-
-@keyframes wiggle {
-    0% { transform: translateX(-50%) rotate(0deg); }
-    25% { transform: translateX(-50%) rotate(-5deg); }
-    50% { transform: translateX(-50%) rotate(0deg); }
-    75% { transform: translateX(-50%) rotate(5deg); }
-    100% { transform: translateX(-50%) rotate(0deg); }
-}
-
-@keyframes float {
-    0% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-10px); }
-    100% { transform: translateX(-50%) translateY(0); }
-}
-
-.basement-logo {
-    width: auto;
-    height: 12px;
-    align-self: center;
-}
-
 .messages-container {
     height: 80%;
     overflow-y: auto;
@@ -84,7 +51,7 @@
     flex-direction: column;
     gap: 16px;
     border-radius: 10px;
-    background-image: linear-gradient(rgba(101, 120, 241, 1), rgba(255, 255, 255, 0.5)), url("/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/chat_background.png");
+    background-image: linear-gradient(rgba(101, 120, 241, 1), rgba(255, 255, 255, 0.5)), url("/w3a_web_res/chat_component_res/chat_background.png");
     background-size: cover;
     background-position: bottom right;
     background-repeat: no-repeat;
@@ -110,8 +77,8 @@
 }
 
 .server-message .message-container {
-    max-width: 75%;
-    min-width: 75%;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 .user-message .message-container {
@@ -161,15 +128,16 @@
 
 .server-message .message {
     background: rgba(255, 255, 255, 0.6);
-    color: black;
+    color: rgba(0, 1, 111, 0.9);
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
 }
 
 .user-message .message {
     background: rgba(255, 255, 255, 0.6);
-    color: black;
+    color: rgba(0, 1, 111, 0.8);
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -221,7 +189,7 @@
 
 .mic-btn img {
     width: auto;
-    height: 70%;
+    height: 50%;
 }
 
 .mic-btn:hover {
@@ -234,7 +202,7 @@
     border: none;
     outline: none;
     background: rgba(255, 255, 255, 0.8);
-    color: black;
+    color: rgba(0, 1, 111, 0.9);
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
@@ -345,12 +313,4 @@
     10% { opacity: 1; transform: translateX(-50%) translateY(0); }
     90% { opacity: 1; }
     100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-}
-
-.basement {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 16px;
 }

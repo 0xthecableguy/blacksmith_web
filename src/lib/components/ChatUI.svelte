@@ -153,7 +153,7 @@
 			container: container,
 
 			waveColor: '#5608fe',
-			progressColor: '#ffffff',
+			progressColor: '#6578f1',
 			cursorColor: '#ffffff',
 			backgroundColor: '#d5deff',
 			mediaControls: true,
@@ -183,7 +183,9 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
-		<img src="{basePath}/person-icon.png" alt="Person" class="banner-person">
+		{#if app_name === "blacksmith_web"}
+			<img src="{basePath}/person-icon.png" alt="Person" class="banner-person" />
+		{/if}
 	</div>
 
 	<div class="messages-container" bind:this={messagesContainer}>
@@ -240,9 +242,11 @@
 		</button>
 	</div>
 
-	<div class="basement">
-		<img src="{basePath}/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
-	</div>
+	{#if app_name === "blacksmith_web"}
+		<div class="basement">
+			<img src="{basePath}/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
+		</div>
+	{/if}
 
 	{#if micNotice}
 		<div class="mic-notice">
