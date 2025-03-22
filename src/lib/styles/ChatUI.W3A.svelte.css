@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'DrukTextWideCyr';
-    src: url('/blacksmith_web/w3a_web_res/chat_component_res/fonts/DrukTextWideCyr-Medium.otf') format('opentype');
+    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/DrukTextWideCyr-Medium.otf') format('opentype');
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'GothamPro';
-    src: url('/blacksmith_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
+    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
@@ -32,7 +32,7 @@
     width: 100%;
     max-width: 100%;
     height: clamp(100px, 14%, 200px);
-    background-image: url("/blacksmith_web/w3a_web_res/chat_component_res/header_banner.png");
+    background-image: url("/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/header_banner.png");
     background-size: 100% auto;
     background-position: left;
     background-repeat: no-repeat;
