@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - cookie_fix_2
+      - w3a_redesign
 jobs:
   deploy-main:
     runs-on: ubuntu-latest
