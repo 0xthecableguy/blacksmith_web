@@ -2,7 +2,7 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { sendMessageToServer, fetchChatHistory } from '$lib/utils/api';
-	import type { BlacksmithServerResponse, MessageSender } from '$lib/types/types';
+	import type { BlacksmithServerResponse, ContentLink, MessageSender } from '$lib/types/types';
 	import { tick } from 'svelte';
 	import { copyToClipboard, speakMessage, sanitize, getUserId, acceptCookies } from '$lib/utils/utils';
 	import { TypingIndicator } from '$lib/utils/typing-indicator';
@@ -21,6 +21,7 @@
 	let showCookieNotice = true;
 	let wavesurfers: WaveSurfer[] = [];
 	let micNotice = false;
+	let currentContentLinks: ContentLink[] = [];
 
 	onMount(async () => {
 		console.log("app_name:", app_name);
@@ -34,7 +35,9 @@
 
 		const currentDomain = window.location.hostname;
 
-		if (currentDomain !== "0xthecableguy.github.io") {
+		const isDev = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
+
+		if (!isDev && currentDomain !== "0xthecableguy.github.io") {
 			basePath = "https://0xthecableguy.github.io" + basePath;
 			console.log("Using absolute path for resources:", basePath);
 		}
@@ -125,11 +128,19 @@
 				app_name
 			});
 
+			if (response.extra_data_parsed && Object.keys(response.extra_data_parsed).length > 0) {
+				currentContentLinks = Object.entries(response.extra_data_parsed)
+					.map(([title, url]) => ({ title, url }))
+					.slice(0, 3);
+			} else {
+				currentContentLinks = [];
+			}
+
 			typingIndicator.stop(response.text);
 			await scrollToBottom();
 		} catch (error) {
 			console.error('Error sending request to server:', error);
-			typingIndicator.stop("Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже");
+			typingIndicator.stop("На сервере ведутся технические работы 🛠️\n\nПожалуйста, повторите ваш запрос позднее.\nМы работаем над улучшением сервиса для вас!");
 		}
 	}
 
@@ -223,6 +234,20 @@
 			</div>
 		{/each}
 	</div>
+
+	{#if currentContentLinks.length > 0}
+		<div class="content-links-container">
+			<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>
+			<p class="content-links-subtitle">функция рекомендаций находится в стадии тестирования</p>
+			<div class="content-links-buttons">
+				{#each currentContentLinks as link}
+					<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">
+						{link.title}
+					</button>
+				{/each}
+			</div>
+		</div>
+	{/if}
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
