@@ -238,7 +238,6 @@
 	{#if currentContentLinks.length > 0}
 		<div class="content-links-container">
 			<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>
-			<p class="content-links-subtitle">функция рекомендаций находится в стадии тестирования</p>
 			<div class="content-links-buttons">
 				{#each currentContentLinks as link}
 					<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">

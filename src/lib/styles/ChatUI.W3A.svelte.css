@@ -349,14 +349,6 @@
     font-weight: 500;
 }
 
-.content-links-subtitle {
-    font-size: 11px;
-    color: darkred;
-    margin: -5px 0 10px 0;
-    text-align: center;
-    font-style: italic;
-}
-
 @keyframes waveColor {
     0% {
         background-position: 0% 50%;
