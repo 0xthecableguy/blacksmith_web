@@ -22,7 +22,7 @@
     box-sizing: border-box;
     overflow: hidden;
     /*background: rgba(86, 6, 255, 0.1);*/
-    padding: 15px;
+    /*padding: 15px;*/
 }
 
 .header-banner-container {
@@ -426,7 +426,7 @@
     font-family: 'DrukTextWideCyr', sans-serif;
     font-weight: 500;
     color: rgba(39, 39, 39, 1);
-    letter-spacing: 0.03em;
+    letter-spacing: -0.5px;
     text-align: left;
 }
 
