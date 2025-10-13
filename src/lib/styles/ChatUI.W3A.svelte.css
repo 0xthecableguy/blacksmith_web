@@ -8,16 +8,16 @@
 @font-face {
     font-family: 'GothamPro';
     src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Medium.ttf') format('truetype');
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'GothamPro';
-    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
+/*@font-face {*/
+/*    font-family: 'GothamPro';*/
+/*    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Bold.ttf') format('truetype');*/
+/*    font-weight: 700;*/
+/*    font-style: normal;*/
+/*}*/
 
 .chat-box {
     width: 100%;
@@ -28,7 +28,7 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    background: rgba(255, 233, 238, 1);
+    background: rgba(86, 6, 255, 0.1);
     padding: 15px;
 }
 
@@ -135,7 +135,7 @@
 
 .server-message .message {
     background: rgba(86, 6, 255, 0.8);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -143,7 +143,7 @@
 
 .user-message .message {
     background: rgba(86, 6, 255, 0.8);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -433,7 +433,7 @@
     font-family: 'DrukTextWideCyr', sans-serif;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.8);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.03em;
     text-align: left;
 }
 
