@@ -134,7 +134,7 @@
 }
 
 .server-message .message {
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(86, 6, 255);
     color: rgba(255, 255, 255, 0.8);
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
@@ -142,7 +142,7 @@
 }
 
 .user-message .message {
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(86, 6, 255);
     color: rgba(255, 255, 255, 0.8);
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
@@ -183,7 +183,7 @@
 
 .mic-btn {
     border: none;
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(86, 6, 255);
     cursor: pointer;
     border-radius: 5px;
     display: flex;
@@ -200,7 +200,7 @@
 }
 
 .mic-btn:hover {
-    background: rgba(101, 120, 241, 0.8);
+    background: rgba(144, 92, 255);
 }
 
 .input-field {
@@ -220,7 +220,7 @@
 
 .send-btn {
     border: none;
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(86, 6, 255);
     color: white;
     cursor: pointer;
     border-radius: 5px;
@@ -238,7 +238,7 @@
 }
 
 .send-btn:hover {
-    background: rgba(101, 120, 241, 0.8);
+    background: rgba(144, 92, 255);
     color: white;
 }
 
@@ -302,7 +302,7 @@
     bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(144, 92, 255);
     color: white;
     padding: 8px 12px;
     border-radius: 12px;
@@ -352,7 +352,7 @@
 }
 
 .content-links-title {
-    background: rgba(86, 6, 255, 0.8);
+    background: rgba(86, 6, 255);
     margin: 0 0 10px 0;
     text-align: center;
     font-weight: 500;
@@ -389,7 +389,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: linear-gradient(270deg, rgba(101, 120, 241, 0.8), rgba(86, 8, 255, 0.6), rgba(101, 120, 241, 0.8));
+    background: linear-gradient(270deg, rgba(144, 92, 255), rgba(86, 8, 255), rgba(144, 92, 255));
     background-size: 200% 200%;
     animation: waveColor 8s ease infinite;
     text-transform: uppercase;
@@ -399,7 +399,7 @@
 }
 
 .content-link-btn:hover {
-    background: linear-gradient(270deg, rgba(101, 120, 241, 0.8), rgba(86, 8, 255, 1), rgba(101, 120, 241, 0.8));
+    background: linear-gradient(270deg, rgba(144, 92, 255), rgba(86, 8, 255), rgba(144, 92, 255));
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -430,7 +430,7 @@
     padding-left: 16px;
     font-size: 16px;
     font-family: 'DrukTextWideCyr', sans-serif;
-    font-weight: 500;
+    font-weight: 900;
     color: rgba(0, 0, 0, 0.8);
     letter-spacing: 1px;
     text-align: left;
