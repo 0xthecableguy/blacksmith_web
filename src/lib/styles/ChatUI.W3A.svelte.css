@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'DrukTextWideCyr';
-    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/DrukTextWideCyr-Medium.otf') format('opentype');
+    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Druk Text Wide Cyr Medium.otf') format('opentype');
     font-weight: 500;
     font-style: normal;
 }
@@ -28,7 +28,7 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(125, 23, 55, 1);
     padding: 15px;
 }
 
