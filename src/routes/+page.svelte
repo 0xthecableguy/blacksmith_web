@@ -26,7 +26,7 @@
         /*background-position: center;*/
         /*background-repeat: no-repeat;*/
         align-items: center;
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.3);
         /*background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/chat_component_res/background.jpg");*/
     }
 </style>

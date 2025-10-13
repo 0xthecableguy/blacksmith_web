@@ -175,8 +175,8 @@
     display: flex;
     align-items: center;
     background: transparent;
-    height: 60px;
-    min-height: 60px;
+    height: 45px;
+    min-height: 45px;
     justify-content: space-between;
     gap: 2%;
 }
@@ -429,9 +429,10 @@
     margin: 0;
     padding-left: 16px;
     font-size: 16px;
-    font-family: 'DrukTextWideCyr', sans-serif;
-    font-weight: 900;
+    /*font-family: 'DrukTextWideCyr', sans-serif;*/
+    /*font-weight: 900;*/
     color: rgba(0, 0, 0, 0.8);
     letter-spacing: 1px;
     text-align: left;
 }
+
