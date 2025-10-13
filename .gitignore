@@ -41,6 +41,10 @@ pnpm-debug.log*
 
 #
 package-lock.json
-/chat-component-package/
 /static/blacksmith_web_res/styles/
 /static/w3a_web_res/styles/
+config/blacksmith-web-dev-config.ts
+config/w3a-web-dev-config.ts
+config/README.txt
+static/blacksmith_web_dev_styles
+static/w3a_web

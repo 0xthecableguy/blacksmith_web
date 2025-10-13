@@ -16,6 +16,12 @@ export interface TextToSpeechResponse {
 
 export interface BlacksmithServerResponse {
 	text: string;
+	extra_data_parsed?: Record<string, string>;
+}
+
+export interface ContentLink {
+	title: string;
+	url: string;
 }
 
 export interface ChatMessage {
