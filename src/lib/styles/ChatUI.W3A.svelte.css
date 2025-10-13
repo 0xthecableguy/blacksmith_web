@@ -12,13 +12,6 @@
     font-style: normal;
 }
 
-/*@font-face {*/
-/*    font-family: 'GothamPro';*/
-/*    src: url('/blacksmith_web/w3a_web/w3a_web_res/chat_component_res/fonts/Gotham Pro Bold.ttf') format('truetype');*/
-/*    font-weight: 700;*/
-/*    font-style: normal;*/
-/*}*/
-
 .chat-box {
     width: 100%;
     height: 100%;
@@ -28,7 +21,7 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    background: rgba(86, 6, 255, 0.1);
+    /*background: rgba(86, 6, 255, 0.1);*/
     padding: 15px;
 }
 
@@ -428,11 +421,11 @@
 
 .chat-title {
     margin: 0;
-    padding-left: 16px;
+    /*padding-left: 16px;*/
     font-size: 16px;
     font-family: 'DrukTextWideCyr', sans-serif;
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(39, 39, 39, 1);
     letter-spacing: 0.03em;
     text-align: left;
 }
