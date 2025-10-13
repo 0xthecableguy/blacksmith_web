@@ -199,6 +199,10 @@
 		{/if}
 	</div>
 
+	<div class="chat-title-container">
+		<h2 class="chat-title">ЧАТ С AI-ПОМОЩНИКОМ</h2>
+	</div>
+
 	<div class="messages-container" bind:this={messagesContainer}>
 		{#each $messages as message}
 			<div class="message-wrapper {message.sender === 'user' ? 'user-message' : 'server-message'}">

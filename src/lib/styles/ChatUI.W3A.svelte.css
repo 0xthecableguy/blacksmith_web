@@ -51,7 +51,8 @@
     flex-direction: column;
     gap: 16px;
     border-radius: 10px;
-    background-image: linear-gradient(rgba(101, 120, 241, 1), rgba(255, 255, 255, 0.5));
+    /*background-image: linear-gradient(rgba(101, 120, 241, 1), rgba(255, 255, 255, 0.5));*/
+    background-color: rgba(255, 255, 255);
     background-size: cover;
     background-position: bottom right;
     background-repeat: no-repeat;
@@ -127,16 +128,16 @@
 }
 
 .server-message .message {
-    background: rgba(255, 255, 255, 0.6);
-    color: rgba(0, 1, 111, 0.9);
+    background: rgba(86, 6, 255, 0.8);
+    color: rgba(255, 255, 255, 0.8);
     border-radius: 15px 15px 15px 0;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .user-message .message {
-    background: rgba(255, 255, 255, 0.6);
-    color: rgba(0, 1, 111, 0.8);
+    background: rgba(86, 6, 255, 0.8);
+    color: rgba(255, 255, 255, 0.8);
     border-radius: 15px 15px 0 15px;
     box-sizing: border-box;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -175,7 +176,7 @@
 
 .mic-btn {
     border: none;
-    background: rgba(101, 120, 241, 0.8);
+    background: rgba(86, 6, 255, 0.8);
     cursor: pointer;
     border-radius: 5px;
     display: flex;
@@ -192,7 +193,7 @@
 }
 
 .mic-btn:hover {
-    background: rgba(86, 8, 254, 0.6);
+    background: rgba(101, 120, 241, 0.8);
 }
 
 .input-field {
@@ -212,7 +213,7 @@
 
 .send-btn {
     border: none;
-    background: rgba(101, 120, 241, 0.8);
+    background: rgba(86, 6, 255, 0.8);
     color: white;
     cursor: pointer;
     border-radius: 5px;
@@ -230,7 +231,7 @@
 }
 
 .send-btn:hover {
-    background: rgba(86, 8, 254, 0.8);
+    background: rgba(101, 120, 241, 0.8);
     color: white;
 }
 
@@ -294,7 +295,7 @@
     bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(101, 120, 241, 0.8);
+    background: rgba(86, 6, 255, 0.8);
     color: white;
     padding: 8px 12px;
     border-radius: 12px;
@@ -343,7 +344,7 @@
 }
 
 .content-links-title {
-    color: rgba(0, 1, 111, 0.9);
+    background: rgba(86, 6, 255, 0.8);
     margin: 0 0 10px 0;
     text-align: center;
     font-weight: 500;
@@ -380,7 +381,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: linear-gradient(270deg, rgba(101, 120, 241, 0.8), rgba(86, 8, 254, 0.6), rgba(101, 120, 241, 0.8));
+    background: linear-gradient(270deg, rgba(101, 120, 241, 0.8), rgba(86, 8, 255, 0.6), rgba(101, 120, 241, 0.8));
     background-size: 200% 200%;
     animation: waveColor 8s ease infinite;
     text-transform: uppercase;
@@ -390,7 +391,7 @@
 }
 
 .content-link-btn:hover {
-    background: linear-gradient(270deg, rgba(101, 120, 241, 1), rgba(86, 8, 254, 1), rgba(101, 120, 241, 1));
+    background: linear-gradient(270deg, rgba(101, 120, 241, 0.8), rgba(86, 8, 255, 1), rgba(101, 120, 241, 0.8));
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -407,4 +408,20 @@
 .content-link-btn:nth-child(3) {
     animation: fadeIn 0.8s ease forwards, waveColor 5s ease infinite;
     animation-delay: 2s, 2s;
+}
+
+.chat-title-container {
+    width: 100%;
+    padding: 8px 0 12px 0;
+    box-sizing: border-box;
+}
+
+.chat-title {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    text-align: left;
 }
