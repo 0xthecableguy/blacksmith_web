@@ -364,10 +364,12 @@
 }
 
 .content-links-title {
-    background: rgba(86, 6, 255);
+    background: transparent;
     margin: 0 0 10px 0;
     text-align: center;
     font-weight: 500;
+    color: rgba(39, 39, 39, 1);
+    font-family: 'DrukTextWideCyr', sans-serif;
 }
 
 @keyframes waveColor {
