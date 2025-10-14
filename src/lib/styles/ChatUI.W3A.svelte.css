@@ -45,7 +45,7 @@
 .messages-container {
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -59,6 +59,24 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     font-family: 'GothamPro', sans-serif;
     margin-bottom: 16px;
+}
+
+.messages-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: rgba(213, 222, 255, 0.3);
+    border-radius: 10px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: rgba(86, 8, 254, 0.6);
+    border-radius: 10px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(86, 8, 254, 0.8);
 }
 
 .message-wrapper {
@@ -426,7 +444,7 @@
     font-family: 'DrukTextWideCyr', sans-serif;
     font-weight: 500;
     color: rgba(39, 39, 39, 1);
-    letter-spacing: -0.5px;
+    letter-spacing: -0.7px;
     text-align: left;
 }
 
