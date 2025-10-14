@@ -370,6 +370,7 @@
     font-weight: 500;
     color: rgba(39, 39, 39, 1);
     font-family: 'DrukTextWideCyr', sans-serif;
+    letter-spacing: -0.7px;
 }
 
 @keyframes waveColor {
