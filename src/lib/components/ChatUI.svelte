@@ -200,7 +200,9 @@
 	</div>
 
 	<div class="chat-title-container">
-		<h2 class="chat-title">ЧАТ С AI-ПОМОЩНИКОМ</h2>
+		{#if app_name === "w3a_web"}
+			<h2 class="chat-title">ЧАТ С AI-ПОМОЩНИКОМ</h2>
+		{/if}
 	</div>
 
 	<div class="messages-container" bind:this={messagesContainer}>
@@ -239,18 +241,19 @@
 		{/each}
 	</div>
 
-	{#if currentContentLinks.length > 0}
-		<div class="content-links-container">
-			<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>
-			<div class="content-links-buttons">
-				{#each currentContentLinks as link}
-					<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">
-						{link.title}
-					</button>
-				{/each}
-			</div>
-		</div>
-	{/if}
+	<!--	Temporary turned-off-->
+	<!--{#if currentContentLinks.length > 0}-->
+	<!--	<div class="content-links-container">-->
+	<!--		<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>-->
+	<!--		<div class="content-links-buttons">-->
+	<!--			{#each currentContentLinks as link}-->
+	<!--				<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">-->
+	<!--					{link.title}-->
+	<!--				</button>-->
+	<!--			{/each}-->
+	<!--		</div>-->
+	<!--	</div>-->
+	<!--{/if}-->
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
