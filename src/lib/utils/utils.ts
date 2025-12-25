@@ -6,9 +6,44 @@ import { type Message } from '$lib/types/types';
 import { tick } from 'svelte';
 
 export function copyToClipboard(text: string) {
-	navigator.clipboard.writeText(text)
-		.then(() => console.log("Copied:", text))
-		.catch(err => console.error("Error copying:", err));
+	const tempDiv = document.createElement('div');
+	tempDiv.innerHTML = text;
+	const plainText = tempDiv.textContent || tempDiv.innerText || '';
+
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(plainText)
+			.then(() => console.log("Copied:", plainText))
+			.catch(err => {
+				console.error("Clipboard API error:", err);
+				fallbackCopy(plainText);
+			});
+	} else {
+		fallbackCopy(plainText);
+	}
+}
+
+function fallbackCopy(text: string) {
+	const textarea = document.createElement('textarea');
+	textarea.value = text;
+	textarea.style.position = 'fixed';
+	textarea.style.opacity = '0';
+	document.body.appendChild(textarea);
+	textarea.focus();
+	textarea.select();
+
+	try {
+		// Using deprecated execCommand as fallback for contexts where Clipboard API is not available
+		const successful = document.execCommand('copy');
+		if (successful) {
+			console.log("Copied (fallback):", text);
+		} else {
+			console.error("Fallback copy failed");
+		}
+	} catch (err) {
+		console.error("Error in fallback copy:", err);
+	}
+
+	document.body.removeChild(textarea);
 }
 
 export async function speakMessage(

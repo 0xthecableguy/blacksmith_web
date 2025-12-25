@@ -241,19 +241,18 @@
 		{/each}
 	</div>
 
-	<!--	Temporary turned-off-->
-	<!--{#if currentContentLinks.length > 0}-->
-	<!--	<div class="content-links-container">-->
-	<!--		<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>-->
-	<!--		<div class="content-links-buttons">-->
-	<!--			{#each currentContentLinks as link}-->
-	<!--				<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">-->
-	<!--					{link.title}-->
-	<!--				</button>-->
-	<!--			{/each}-->
-	<!--		</div>-->
-	<!--	</div>-->
-	<!--{/if}-->
+	{#if currentContentLinks.length > 0}
+		<div class="content-links-container">
+			<p class="content-links-title">• УРОКИ ПО ТЕМЕ ВАШЕГО ЗАПРОСА •</p>
+			<div class="content-links-buttons">
+				{#each currentContentLinks as link}
+					<button class="content-link-btn" on:click={() => window.open(link.url, '_blank')} aria-label="Open in a new tab" title="Open in a new tab">
+						{link.title}
+					</button>
+				{/each}
+			</div>
+		</div>
+	{/if}
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
