@@ -272,6 +272,10 @@
 		</button>
 	</div>
 
+	<div class="disclaimer">
+		Ассистент может допускать ошибки. Перепроверяйте ответы.
+	</div>
+
 	{#if app_name === "blacksmith_web"}
 		<div class="basement">
 			<img src="{basePath}/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
