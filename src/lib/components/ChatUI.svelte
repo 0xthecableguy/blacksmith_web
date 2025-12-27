@@ -199,6 +199,12 @@
 		{/if}
 	</div>
 
+	<div class="chat-title-container">
+		{#if app_name === "w3a_web"}
+			<h2 class="chat-title">ЧАТ С AI-ПОМОЩНИКОМ</h2>
+		{/if}
+	</div>
+
 	<div class="messages-container" bind:this={messagesContainer}>
 		{#each $messages as message}
 			<div class="message-wrapper {message.sender === 'user' ? 'user-message' : 'server-message'}">
@@ -264,6 +270,10 @@
 		<button on:click={sendMessage} class="send-btn">
 			<img src="{basePath}/mini_logo.png" alt="Send" />
 		</button>
+	</div>
+
+	<div class="disclaimer">
+		Ассистент может допускать ошибки. Перепроверяйте ответы.
 	</div>
 
 	{#if app_name === "blacksmith_web"}
