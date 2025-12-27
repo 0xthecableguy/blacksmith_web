@@ -48,3 +48,4 @@ config/w3a-web-dev-config.ts
 config/README.txt
 static/blacksmith_web_dev_styles
 static/w3a_web
+CLAUDE.md
