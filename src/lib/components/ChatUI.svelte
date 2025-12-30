@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import { sendMessageToServer, fetchChatHistory } from '$lib/utils/api';
 	import type { BlacksmithServerResponse, ContentLink, MessageSender } from '$lib/types/types';
 	import { tick } from 'svelte';
@@ -12,7 +13,6 @@
 	import { config } from '$lib/config'
 
 	export let app_name: string = config.app_name;
-	export let basePath: string = config.basePath;
 
 	const messages = writable<Message[]>([]);
 	let userMessage = '';
@@ -23,23 +23,22 @@
 	let micNotice = false;
 	let currentContentLinks: ContentLink[] = [];
 
+	let cssLoaded = false;
+
 	onMount(async () => {
 		console.log("app_name:", app_name);
-		console.log("basePath:", basePath);
-		console.log("cssPath:", config.cssPath);
+		console.log("base path:", base);
 
-		const linkElement = document.createElement('link');
-		linkElement.rel = 'stylesheet';
-		linkElement.href = config.cssPath;
-		document.head.appendChild(linkElement);
-
-		const currentDomain = window.location.hostname;
-
-		const isDev = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
-
-		if (!isDev && currentDomain !== "0xthecableguy.github.io") {
-			basePath = "https://0xthecableguy.github.io" + basePath;
-			console.log("Using absolute path for resources:", basePath);
+		if (!cssLoaded) {
+			const linkElement = document.createElement('link');
+			linkElement.rel = 'stylesheet';
+			if (app_name === 'bls_web') {
+				linkElement.href = `${base}/assets/bls_web/ChatUI.bls.svelte.css`;
+			} else if (app_name === 'w3a_web') {
+				linkElement.href = `${base}/assets/w3a_web/ChatUI.w3a.svelte.css`;
+			}
+			document.head.appendChild(linkElement);
+			cssLoaded = true;
 		}
 
 		userId = getUserId();
@@ -77,7 +76,7 @@
 
 			if (formattedHistory.length === 0) {
 				messages.set([{
-					text: "Привет! Я ваш виртуальный помощник. 🫡\nЧем я могу вам помочь сегодня?",
+					text: "Привет! Я ваш виртуальный помощник. 🫡<br>Чем я могу вам помочь сегодня?",
 					sender: 'server',
 					type: 'text' as const
 				}]);
@@ -85,7 +84,7 @@
 				messages.set([
 					...formattedHistory,
 					{
-						text: "С возвращением!\nЧем могу быть полезен? 😁️",
+						text: "С возвращением!<br>Чем могу быть полезен? 😁️",
 						sender: 'server',
 						type: 'text' as const
 					}
@@ -97,7 +96,7 @@
 			console.error("Error fetching chat history:", error);
 
 			messages.set([{
-				text: "Привет! Я ваш виртуальный помощник.\nК сожалению, мне не удалось загрузить историю сообщений, давайте попробуем начать общение сначала.",
+				text: "Привет! Я ваш виртуальный помощник.<br>К сожалению, мне не удалось загрузить историю сообщений, давайте попробуем начать общение сначала.",
 				sender: 'server',
 				type: 'text' as const
 			}]);
@@ -194,8 +193,8 @@
 
 <div class="chat-box">
 	<div class="header-banner-container">
-		{#if app_name === "blacksmith_web"}
-			<img src="{basePath}/person-icon.png" alt="Person" class="banner-person" />
+		{#if app_name === "bls_web"}
+			<img src="{base}/assets/bls_web/images/person-icon.png" alt="Person" class="banner-person" />
 		{/if}
 	</div>
 
@@ -228,11 +227,11 @@
 					{#if message.sender === 'server' && message.type === 'text'}
 						<div class="message-actions">
 							<button class="copy-btn" on:click={() => copyToClipboard(message.text)} aria-label="Copy" title="Copy message">
-								<img src="{basePath}/copy_icon.png" alt="Copy"/>
+								<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/copy_icon.png" alt="Copy"/>
 							</button>
 
 							<button class="speak-btn" on:click={() => speakMessage(message.text, userId, messages, scrollToBottom, app_name)} aria-label="Voice message" title="Voice message">
-								<img src="{basePath}/speak_icon.png" alt="Speak"/>
+								<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/speak_icon.png" alt="Speak"/>
 							</button>
 						</div>
 					{/if}
@@ -256,7 +255,7 @@
 
 	<div class="bottom-row">
 		<button class="mic-btn" on:click={showMicNotice}>
-			<img src="{basePath}/mic_icon.png" alt="Voice Message"/>
+			<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/mic_icon.png" alt="Voice Message"/>
 		</button>
 
 		<input
@@ -268,17 +267,19 @@
 		/>
 
 		<button on:click={sendMessage} class="send-btn">
-			<img src="{basePath}/mini_logo.png" alt="Send" />
+			<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/mini_logo.png" alt="Send" />
 		</button>
 	</div>
 
 	<div class="disclaimer">
+		{#if app_name === "w3a_web"}
 		Ассистент может допускать ошибки. Перепроверяйте ответы.
+		{/if}
 	</div>
 
-	{#if app_name === "blacksmith_web"}
+	{#if app_name === "bls_web"}
 		<div class="basement">
-			<img src="{basePath}/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
+			<img src="{base}/assets/bls_web/images/logo_black.png" alt="Chat Basement Logo" class="basement-logo" />
 		</div>
 	{/if}
 

@@ -1,3 +1,3 @@
 export const config = {
-	app_name: "w3a_web"
+	app_name: "bls_web"
 };
