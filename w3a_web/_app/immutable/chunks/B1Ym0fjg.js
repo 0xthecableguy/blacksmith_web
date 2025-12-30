@@ -1,0 +1,1 @@
+var s;const e=((s=globalThis.__sveltekit_1674r4q)==null?void 0:s.base)??"/blacksmith_web/w3a_web";var a;const t=((a=globalThis.__sveltekit_1674r4q)==null?void 0:a.assets)??e??"";export{t as a,e as b};
