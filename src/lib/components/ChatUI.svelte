@@ -272,7 +272,9 @@
 	</div>
 
 	<div class="disclaimer">
+		{#if app_name === "w3a_web"}
 		Ассистент может допускать ошибки. Перепроверяйте ответы.
+		{/if}
 	</div>
 
 	{#if app_name === "bls_web"}
