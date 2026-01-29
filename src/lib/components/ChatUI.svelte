@@ -22,6 +22,7 @@
 	let wavesurfers: WaveSurfer[] = [];
 	let micNotice = false;
 	let currentContentLinks: ContentLink[] = [];
+	let textareaElement: HTMLTextAreaElement;
 
 	let cssLoaded = false;
 
@@ -115,6 +116,9 @@
 
 		const userText = userMessage;
 		userMessage = '';
+		if (textareaElement) {
+			textareaElement.style.height = 'auto';
+		}
 
 		const typingIndicator = new TypingIndicator({ messages });
 		typingIndicator.start();
@@ -189,6 +193,20 @@
 		micNotice = true;
 		setTimeout(() => micNotice = false, 3000);
 	}
+
+	function autoResizeTextarea() {
+		if (!textareaElement) return;
+		textareaElement.style.height = 'auto';
+		const maxHeight = 120; // ~5 lines
+		textareaElement.style.height = Math.min(textareaElement.scrollHeight, maxHeight) + 'px';
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault();
+			sendMessage();
+		}
+	}
 </script>
 
 <div class="chat-box">
@@ -258,13 +276,15 @@
 			<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/mic_icon.png" alt="Voice Message"/>
 		</button>
 
-		<input
-			type="text"
+		<textarea
+			bind:this={textareaElement}
 			bind:value={userMessage}
 			placeholder="Type your message here..."
 			class="input-field"
-			on:keydown={(e) => e.key === 'Enter' && sendMessage()}
-		/>
+			rows="1"
+			on:keydown={handleKeydown}
+			on:input={autoResizeTextarea}
+		></textarea>
 
 		<button on:click={sendMessage} class="send-btn">
 			<img src="{base}/assets/{app_name === 'bls_web' ? 'bls_web' : 'w3a_web'}/images/mini_logo.png" alt="Send" />
