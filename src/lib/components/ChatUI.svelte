@@ -117,7 +117,8 @@
 		const userText = userMessage;
 		userMessage = '';
 		if (textareaElement) {
-			textareaElement.style.height = 'auto';
+			textareaElement.style.height = '35px';
+			textareaElement.style.overflowY = 'hidden';
 		}
 
 		const typingIndicator = new TypingIndicator({ messages });
@@ -197,8 +198,10 @@
 	function autoResizeTextarea() {
 		if (!textareaElement) return;
 		textareaElement.style.height = 'auto';
-		const maxHeight = 120; // ~5 lines
-		textareaElement.style.height = Math.min(textareaElement.scrollHeight, maxHeight) + 'px';
+		const maxHeight = 120;
+		const newHeight = Math.min(textareaElement.scrollHeight, maxHeight);
+		textareaElement.style.height = newHeight + 'px';
+		textareaElement.style.overflowY = textareaElement.scrollHeight > maxHeight ? 'auto' : 'hidden';
 	}
 
 	function handleKeydown(e: KeyboardEvent) {

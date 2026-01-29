@@ -1,14 +1,14 @@
 @font-face {
     font-family: 'DrukTextWideCyr';
     src: url('./fonts/Druk Text Wide Cyr Medium.otf') format('opentype');
-    font-weight: 500;
+    font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'GothamPro';
     src: url('./fonts/Gotham Pro Medium.ttf') format('truetype');
-    font-weight: 500;
+    font-weight: 400;
     font-style: normal;
 }
 
@@ -226,20 +226,21 @@
 
 .input-field {
     flex: 1;
-    min-height: 35px;
+    height: 35px;
     max-height: 120px;
     border: none;
     outline: none;
     background: rgba(255, 255, 255, 0.8);
     color: rgba(86, 6, 255);
     border-radius: 5px;
-    padding: 8px 10px;
+    padding: 6px 10px;
     font-family: 'GothamPro', sans-serif;
     font-size: 16px;
     line-height: 1.4;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     resize: none;
-    overflow-y: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
 }
 
 .send-btn {
