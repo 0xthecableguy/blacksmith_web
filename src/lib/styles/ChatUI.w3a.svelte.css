@@ -21,8 +21,8 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    /*background: rgba(86, 6, 255, 0.1);*/
-    padding: 10px;
+    background: rgba(86, 6, 255, 0.1);
+    padding: 15px;
 }
 
 .header-banner-container {
