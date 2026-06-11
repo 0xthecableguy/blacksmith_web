@@ -222,10 +222,22 @@ export function acceptCookies(onAccepted?: () => void) {
 
 	if (window.self !== window.top) {
 		try {
+			let parentOrigin = "*";
+			try {
+				if (document.referrer) {
+					const referrerUrl = new URL(document.referrer);
+					parentOrigin = referrerUrl.origin;
+				}
+			} catch {
+				console.warn("Could not determine parent origin, using wildcard");
+			}
+
 			window.parent.postMessage({
 				type: "cookieConsentAccepted",
 				value: true
-			}, "https://www.blacksmith-lab.com");
+			}, parentOrigin);
+
+			console.log("[Cookie] Message sent to parent origin:", parentOrigin);
 		} catch (e) {
 			console.error("Error sending message to parent:", e);
 		}

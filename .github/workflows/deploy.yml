@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - refactoring_and_optimizations
+      - visual_improvements
 jobs:
   deploy-main:
     runs-on: ubuntu-latest

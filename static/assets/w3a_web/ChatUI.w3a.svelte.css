@@ -184,9 +184,8 @@
 .bottom-row {
     flex-shrink: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     background: transparent;
-    height: 35px;
     min-height: 35px;
     justify-content: space-between;
     gap: 2%;
@@ -210,8 +209,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1 / 1;
-    height: 100%;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
@@ -225,18 +225,22 @@
 }
 
 .input-field {
-    height: 100%;
     flex: 1;
+    height: 35px;
+    max-height: 120px;
     border: none;
     outline: none;
     background: rgba(255, 255, 255, 0.8);
     color: rgba(86, 6, 255);
     border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 6px 10px;
     font-family: 'GothamPro', sans-serif;
     font-size: 16px;
+    line-height: 1.4;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    resize: none;
+    overflow-y: hidden;
+    box-sizing: border-box;
 }
 
 .send-btn {
@@ -245,8 +249,9 @@
     color: white;
     cursor: pointer;
     border-radius: 5px;
-    width: 10%;
-    height: 100%;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
