@@ -2,6 +2,7 @@ export interface BlacksmithWebUserRequest {
 	text: string;
 	user_id: string;
 	app_name: string;
+	link_variant?: string;
 }
 
 export interface TextToSpeechRequest {

@@ -14,7 +14,8 @@ export const sendMessageToServer = async (payload: BlacksmithWebUserRequest): Pr
 
 	const modifiedPayload = {
 		...payload,
-		user_id: payload.user_id
+		user_id: payload.user_id,
+		link_variant: payload.link_variant ?? config.link_variant
 	};
 
 	const response = await fetch(`${API_BASE}/blacksmith_web_user_request`, {
